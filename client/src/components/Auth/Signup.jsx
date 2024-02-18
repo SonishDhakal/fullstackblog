@@ -1,9 +1,40 @@
 import React, { useState } from 'react'
-import { TextInput, Textarea, Button, Modal } from 'flowbite-react'
+import { TextInput, Button, Modal } from 'flowbite-react'
 import {RiLockPasswordLine, RiMailLine, RiUser2Line} from 'react-icons/ri'
+
 const Signup = ({setCurrentState}) => {
   const [modal,setModal] = useState(false)
   const [vcode,setVcode] = useState([])
+
+  const [form,setFrom] = useState({})
+
+  async function handelSubmit(e){
+    e.preventDefault();
+
+    try{
+      const newUserId = await fetch('/api/auth/sign-up' ,{
+        method:'POST',
+        headers:{
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify(form)
+      })
+
+      const data = await newUserId.json()
+
+      if(!newUserId.ok){
+       return console.log(data.message)
+      }
+      setModal(true)
+
+      console.log(data)
+
+    }
+    catch(e){
+      console.log(e)
+    }
+
+  }
 
 
   function handelCode(e){
@@ -14,6 +45,9 @@ const Signup = ({setCurrentState}) => {
 
 
   }
+
+
+
   return (
 <div className='shadow-xl  px-8 py-12 flex flex-col gap-12'>
   <div>
@@ -21,13 +55,13 @@ const Signup = ({setCurrentState}) => {
 
 
   </div>
-  <form className='flex flex-col gap-4'>
-  <TextInput placeholder='Username' icon={RiUser2Line} type='text' id='username' />
-    <TextInput placeholder='Email' icon={RiMailLine} type='email' id='email' />
-    <TextInput icon={RiLockPasswordLine} placeholder='password' id='passowrd' type='password' />
-    <Button onClick={() => setModal(true)}  gradientDuoTone={'redToYellow'} className='w-full' pill>Sign In</Button>
+  <form onSubmit={handelSubmit} className='flex flex-col gap-4'>
+  <TextInput required minLength={4} maxLength={16} onChange={(e) => setFrom({...form, username:e.target.value})} placeholder='Username' icon={RiUser2Line} type='text' id='username' />
+    <TextInput required onChange={(e) => setFrom({...form, email:e.target.value})} placeholder='Email' icon={RiMailLine} type='email' id='email' />
+    <TextInput required minLength={8} maxLength={16} onChange={(e) => setFrom({...form, password:e.target.value})} icon={RiLockPasswordLine} placeholder='password' id='passowrd' type='password' />
+    <Button type='submit'  gradientDuoTone={'redToYellow'} className='w-full' pill>Sign up</Button>
 
-    <span>Don't have an account? <span className='text-red-400 cursor-pointer' onClick={() => setCurrentState('signin')}>Signup</span></span>
+    <span>Don't have an account? <span className='text-red-400 cursor-pointer' onClick={() => setCurrentState('signin')}>Signin</span></span>
   
   <Modal className='' size={'sm'} show={modal} onClose={() => setModal(false)}>
 <div className='p-4'>
