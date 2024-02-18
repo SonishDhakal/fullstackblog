@@ -1,25 +1,30 @@
 import nodemailer from 'nodemailer'
 import {randomBytes} from 'node:crypto'
-const emailConfig = {
-    service: process.env.SERVICE,
-    host: process.env.HOST,
-    port:process.env.PORT,
-    secure:false,
-    auth:{
-        user:process.env.EMAIL,
-        pass:process.env.PASS
-    }
-}
+import Code from '../modals/verificationCode.modal.js'
+import User from '../modals/user.modal.js'
+import { handelError } from '../utils/handelError.js'
+import jwt from 'jsonwebtoken'
 
 
 export const sendVerificationCode = async (req,res,next) =>{
 
-  
-    const {email} = req.body
+
+    const {email,id} = req.body
+
+    const emailConfig = {
+        service: process.env.SERVICE,
+        host: process.env.HOST,
+        port:process.env.PORT,
+        secure:false,
+        auth:{
+            user:process.env.EMAIL,
+            pass:process.env.PASS
+        }
+    }
 
     const code = randomBytes(4).toString('hex').slice(0,4)
 
-    console.log(process.env.SERVICE, process.env.HOST, process.env.PORT, process.env.PASS, process.env.EMAIL)
+    
 
 
 
@@ -37,8 +42,14 @@ export const sendVerificationCode = async (req,res,next) =>{
 
     try{
 
-        const res = await transporter.sendMail(mailOptions)
-        console.log("Email Sent Success")
+         await transporter.sendMail(mailOptions)
+
+        const newCode = new Code({code})
+        await newCode.save()
+
+
+        res.status(200).json(newCode._id)
+
 
     }
     catch(e){
@@ -51,57 +62,59 @@ export const sendVerificationCode = async (req,res,next) =>{
 
 }
 
-import express from 'express';
-import nodemailer from 'nodemailer';
 
-const app = express();
-const port = 3000;
 
-// Your email credentials and details
-const emailConfig = {
-    service:'gmail',
-  host: 'smtp.GMAIL.com', // Replace with your SMTP server
-  port: 587, // Replace with your SMTP port
-  secure: false, // Use true for TLS, false for STARTTLS
-  auth: {
-    user: 'sonishdhakal122@gmail.com',
-    pass: 'knim nqmz buoe rdaf '
-  }
-};
 
-// Function to send the email
-async function sendEmail() {
-  const transporter = nodemailer.createTransport(emailConfig);
 
-  const mailOptions = {
-    from: 'sonishdhakal122@gmail.com',
-    to: 'sonishdhakal1021@gmail.com',
-    subject: 'Email from Node.js server',
-    text: 'This is an email sent from your Node.js server using Nodemailer and Express.'
-  };
 
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.response);
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
+export const verifyCode = async (req,res,next) => {
+
+    const {code, codeId, userId} = req.body;
+
+
+
+    try{
+        const findCode = await Code.findById(codeId);
+
+        if(findCode.code ===code){
+
+            const check = await User.findByIdAndUpdate(userId,{
+                emailVerified:true,
+            },{new:true})
+
+
+            if(check){
+                const {password, ...rest} = check._doc
+
+
+            const token = jwt.sign(
+                {
+                    id:check._id,
+                    emailVerified: check.emailVerified,
+                    onBoardingComplete:check.onBoardingComplete
+
+                },
+                process.env.JWT_SECRET
+            )
+
+            
+             
+
+            
+            
+
+
+
+            res.status(200).cookie('access_token', token ,{httpOnly:true}).json(rest)
+            }
+        }
+        else{
+           return next(handelError(401, "Incorrect Verification Code"))
+        }
+
+    }
+    catch(e){
+        next(e)
+        
+    }
 }
-
-// GET route to trigger email sending
-app.get('/', async (req, res) => {
-  try {
-    await sendEmail();
-    res.send('Email sent successfully!');
-  } catch (error) {
-    res.status(500).send('Error sending email: ' + error.message);
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
-
-
-
-

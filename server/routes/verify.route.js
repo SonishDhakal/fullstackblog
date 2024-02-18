@@ -1,9 +1,10 @@
 import express from 'express'
-import { sendVerificationCode } from '../controllers/verify.controller.js'
+import { sendVerificationCode, verifyCode } from '../controllers/verify.controller.js'
 
 const router = express.Router()
 
 router.post('/send', sendVerificationCode)
+router.post('/check', verifyCode)
 
 
 export default router;
