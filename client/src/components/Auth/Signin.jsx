@@ -157,7 +157,9 @@ const Signin = ({ setCurrentState }) => {
           </span>
         </span>
 
-        <Modal
+     
+      </form>
+      <Modal
           className=""
           size={"sm"}
           show={modal}
@@ -191,7 +193,7 @@ const Signin = ({ setCurrentState }) => {
                 />
               </div>
               {resend ? (
-                <p onClick={sendVerificationCode} className="text-center cursor-pointer mt-3 hover:underline">Resend Code</p>
+                <p onClick={() => sendVerificationCode(form.email)} className="text-center cursor-pointer mt-3 hover:underline">Resend Code</p>
               ) : (
                 <Countdown 
                   date={Date.now() + remainingTime}
@@ -212,7 +214,6 @@ const Signin = ({ setCurrentState }) => {
             </div>
           </div>
         </Modal>
-      </form>
     </div>
   );
 };
