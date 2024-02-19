@@ -4,12 +4,13 @@ import Code from '../modals/verificationCode.modal.js'
 import User from '../modals/user.modal.js'
 import { handelError } from '../utils/handelError.js'
 import jwt from 'jsonwebtoken'
+import moment from 'moment'
 
 
 export const sendVerificationCode = async (req,res,next) =>{
 
 
-    const {email,id} = req.body
+    const {email} = req.body
 
     const emailConfig = {
         service: process.env.SERVICE,
@@ -75,6 +76,19 @@ export const verifyCode = async (req,res,next) => {
 
     try{
         const findCode = await Code.findById(codeId);
+
+        const expiryTime = moment(findCode.createdAt).add(5, 'minutes');
+
+        const isInvalid = moment().isAfter(expiryTime);
+
+        if(isInvalid){
+            return next(handelError(400, "Verification code Expired"))
+        }
+
+
+        
+
+
 
         if(findCode.code ===code){
 

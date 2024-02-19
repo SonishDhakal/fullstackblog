@@ -4,7 +4,7 @@ import Signin from '../components/Auth/Signin'
 import EmailVerification from '../components/Auth/EmailVerification'
 
 const Auth = () => {
-    const [currentState, setCurrentState] = useState('verify')
+    const [currentState, setCurrentState] = useState('signin')
   return (
     <div className='w-screen h-[90vh] grid place-content-center'>
         {currentState==='signin' ? <Signin setCurrentState={setCurrentState} /> : <Signup setCurrentState={setCurrentState}  /> }
