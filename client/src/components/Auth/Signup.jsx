@@ -1,10 +1,18 @@
 import React, { useState,useEffect } from "react";
-import { TextInput, Button, Modal, useThemeMode } from "flowbite-react";
+import { TextInput, Button, Modal, useThemeMode, Spinner,Alert } from "flowbite-react";
 import { RiLockPasswordLine, RiMailLine, RiUser2Line } from "react-icons/ri";
-;
+import {useSelector,useDispatch} from 'react-redux'
+import {signUpSuccess,signUpStart,signUpFailure,signupCreated} from '../../redux/user/userSlice' 
+
 
 
 const Signup = ({ setCurrentState }) => {
+
+  const {loading,error} = useSelector(state => state.user)
+
+  const dispatch = useDispatch()
+
+
   const [modal, setModal] = useState(false);
   const [vcode, setVcode] = useState([]);
 
@@ -26,11 +34,13 @@ const Signup = ({ setCurrentState }) => {
   async function verifyCode() {
     const finalCode = vcode.join("");
 
+    dispatch(signUpStart())
+
     const check = vcode.some((item) => item === "" || item === null);
 
     if (check) {
       console.log(check);
-      return console.log("Add all the feilds");
+      return dispatch(signUpFailure('Add all four digits'))
     }
 
     try {
@@ -45,12 +55,14 @@ const Signup = ({ setCurrentState }) => {
       const data = await res.json();
 
       if (res.ok) {
-        console.log(data);
+        dispatch(signUpSuccess(data))
+
       } else {
-        console.log("Incorrect Verification Code");
+        dispatch(signUpFailure('Incorrect Code'))
       }
     } catch (e) {
-      console.log(e);
+      dispatch(signUpFailure(e.message))
+
     }
   }
 
@@ -67,8 +79,11 @@ const Signup = ({ setCurrentState }) => {
       const data = await res.json();
 
       if (res.ok) {
+       
+        dispatch(signupCreated())
         setRemainingTime(5 * 60 * 1000)
         setIsStarted(true)
+        setModal(true);
      
         
                 setResend(false)
@@ -77,12 +92,14 @@ const Signup = ({ setCurrentState }) => {
         console.log(data.message);
       }
     } catch (e) {
-      console.log(e);
+dispatch(signUpFailure(e.message))
     }
   }
 
   async function handelSubmit(e) {
     e.preventDefault();
+    dispatch(signUpStart())
+    
 
     try {
       const newUserId = await fetch("/api/auth/sign-up", {
@@ -96,14 +113,15 @@ const Signup = ({ setCurrentState }) => {
       const data = await newUserId.json();
 
       if (!newUserId.ok) {
-        return console.log(data.message);
+        return dispatch(signUpFailure(data.message))
       } else {
+        
         setUserId(data);
         sendVerificationCode();
-        setModal(true);
+        
       }
     } catch (e) {
-      console.log(e);
+dispatch(signUpFailure(e.message))
     }
   }
 
@@ -166,13 +184,13 @@ const Signup = ({ setCurrentState }) => {
           id="passowrd"
           type="password"
         />
-        <Button
+        <Button disabled={loading}
           type="submit"
           gradientDuoTone={"redToYellow"}
           className="w-full"
           pill
         >
-          Sign up
+        {loading ? <Spinner /> : 'Sign up'}
         </Button>
 
         <span>
@@ -184,6 +202,7 @@ const Signup = ({ setCurrentState }) => {
             Signin
           </span>
         </span>
+        {!modal && error && <Alert color={'failure'}>{error}</Alert> }
 
         <Modal
           className=""
@@ -225,14 +244,16 @@ const Signup = ({ setCurrentState }) => {
 <p className="text-center mt-5">Verification Code Expires in <span className="text-semibold">{minutes}:{seconds.toString().padStart(2, '0')}</span></p>
 
               )}
+
+              {error && <Alert className="text-center mt-2 " color={'failure'}>{error}</Alert>}
             </Modal.Body>
 
             <div className="flex justify-between">
               <Button outline onClick={() => setModal(false)}>
                 Change Email
               </Button>
-              <Button onClick={verifyCode} gradientDuoTone={"purpleToBlue"}>
-                Next
+              <Button disabled={loading} onClick={verifyCode} gradientDuoTone={"purpleToBlue"}>
+                {loading ? <Spinner /> : 'Next'}
               </Button>
             </div>
           </div>

@@ -1,9 +1,17 @@
 import  { useState,useEffect } from "react";
-import { TextInput, Button, Modal } from "flowbite-react";
+import { TextInput, Button, Modal ,Alert,Spinner} from "flowbite-react";
 import { RiLockPasswordLine, RiMailLine } from "react-icons/ri";
+import {signUpSuccess,signUpStart,signUpFailure,signupCreated} from '../../redux/user/userSlice' 
+import {useSelector,useDispatch} from 'react-redux'
 
-import CountUp from 'react-countup'
+
+
 const Signin = ({ setCurrentState }) => {
+
+  const {loading,error} = useSelector(state => state.user)
+
+  const dispatch = useDispatch()
+
   const [modal, setModal] = useState(false);
   const [vcode, setVcode] = useState([]);
 
@@ -27,14 +35,18 @@ const Signin = ({ setCurrentState }) => {
 
   async function verifyCode() {
     const finalCode = vcode.join("");
+    dispatch(signUpStart())
 
     const check = vcode.some((item) => item==='' || item===null)
+
+
 
     if (check) {
       return console.log("Add all the feilds");
     }
 
     try {
+      
       const res = await fetch("/api/verificationcode/check", {
         method: "POST",
         headers: {
@@ -46,12 +58,15 @@ const Signin = ({ setCurrentState }) => {
       const data = await res.json();
 
       if (res.ok) {
-        console.log(data);
+        dispatch(signUpSuccess(data))
+
       } else {
-        console.log("Incorrect Verification Code");
+        dispatch(signUpFailure('Incorrect Code'))
+
       }
     } catch (e) {
-      console.log(e);
+      dispatch(signUpFailure(e.message))
+
     }
   }
 
@@ -68,8 +83,10 @@ const Signin = ({ setCurrentState }) => {
       const data = await res.json();
 
       if (res.ok) {
-setIsStarted(true)
-setRemainingTime(5 * 60 * 1000)
+        dispatch(signupCreated())
+        setRemainingTime(5 * 60 * 1000)
+        setIsStarted(true)
+        setModal(true);
 
         setResend(false)
         return setCoceId(data);
@@ -77,12 +94,15 @@ setRemainingTime(5 * 60 * 1000)
         console.log(data.message);
       }
     } catch (e) {
-      console.log(e);
+      dispatch(signUpFailure(e.message))
+
     }
   }
 
   async function handelSubmit(e) {
     e.preventDefault();
+    dispatch(signUpStart())
+
 
     try {
       const newUserId = await fetch("/api/auth/sign-in", {
@@ -95,22 +115,27 @@ setRemainingTime(5 * 60 * 1000)
 
       const data = await newUserId.json();
       if(!newUserId.ok){
-        return console.log(data.message)
+        return dispatch(signUpFailure(data.message))
       }
       if(data?.unverified){
         setUserId(data.userId);
         setFrom({...form, email:data.email})
        await sendVerificationCode(data.email);
-        return setModal(true);
+       console.log(data)
+return
 
       }
       else{
-        return console.log(data)
+        console.log(data)
+
+        return dispatch(signUpSuccess(data))
+
       }
 
      
     } catch (e) {
-      console.log(e);
+      dispatch(signUpFailure(e.message))
+
     }
   }
 
@@ -163,14 +188,15 @@ setRemainingTime(5 * 60 * 1000)
           id="passowrd"
           type="password"
         />
-        <Button
+        <Button disabled={loading}
           type="submit"
           gradientDuoTone={"redToYellow"}
           className="w-full"
           pill
         >
-          Sign up
+{loading ? <Spinner /> : 'Sign in'}
         </Button>
+
 
         <span>
           Don't have an account?
@@ -181,6 +207,8 @@ setRemainingTime(5 * 60 * 1000)
             Signup
           </span>
         </span>
+        {!modal && error && <Alert color={'failure'}>{error}</Alert> }
+
 
      
       </form>
@@ -224,6 +252,7 @@ setRemainingTime(5 * 60 * 1000)
 <p className="text-center mt-5">Verification Code Expires in <span className="text-semibold">{minutes}:{seconds.toString().padStart(2, '0')}</span></p>
 
               )}
+              {error && <Alert className="text-center mt-2 " color={'failure'}>{error}</Alert>}
              
             </Modal.Body>
 
@@ -231,8 +260,9 @@ setRemainingTime(5 * 60 * 1000)
               <Button outline onClick={() => setModal(false)}>
                 Change Email
               </Button>
-              <Button onClick={verifyCode} gradientDuoTone={"purpleToBlue"}>
-                Next
+              <Button disabled={loading} onClick={verifyCode} gradientDuoTone={"purpleToBlue"}>
+                {loading ? <Spinner /> : 'Next'}
+                
               </Button>
             </div>
           </div>
