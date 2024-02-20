@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
         required:true,
         unique:true,
     },
+    
     email:{
         type:String,
         required:true,
@@ -17,12 +18,6 @@ const userSchema = new mongoose.Schema({
         required:true,
 
     },
-    profilePicture:{
-        type:String,
-        default: 'https://firebasestorage.googleapis.com/v0/b/fullstackblogapp.appspot.com/o/user.png?alt=media&token=ae55119c-08d8-48c6-9077-0428916e2503'
-
-
-    },
     emailVerified:{
         type:Boolean,
         default:false
@@ -31,22 +26,7 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    bookmarks:{
-        type:Array,
-        default:[]
-    },
-    likes:{
-        type:Array,
-        default:[]
-    },
-    followers:{
-        type:Array,
-        default:[]
-    },
-    following:{
-        type:Array,
-        default:[]
-    },
+
 
     
 },{timestamps:true})
