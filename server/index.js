@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 const app = express();
 import authRoute from './routes/auth.route.js'
 import verifyRoute from './routes/verify.route.js'
+import profileRoute from './routes/profile.route.js'
+
 
 dotenv.config()
 
@@ -31,6 +33,7 @@ app.use(express.json())
 
 app.use('/api/auth', authRoute)
 app.use('/api/verificationcode', verifyRoute)
+app.use('/api/profile', profileRoute)
 
 
 

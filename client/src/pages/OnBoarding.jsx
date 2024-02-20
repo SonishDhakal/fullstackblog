@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import {
+  Alert,
   Button,
   Checkbox,
   Label,
   Select,
+  Spinner,
   TextInput,
   Textarea,
 } from "flowbite-react";
@@ -11,11 +13,16 @@ import { storage } from "../utils/Firebase";
 import { getDownloadURL, uploadBytesResumable, ref } from "firebase/storage";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import {useDispatch,useSelector} from 'react-redux'
+import { signUpFailure, signUpStart, signUpSuccess, signupCreated } from "../redux/user/userSlice";
 const OnBoarding = () => {
+  const {currentUser,loading,error} = useSelector(state => state.user)
+  const dispatch = useDispatch()
   const [form, setForm] = useState({});
   const [tempImage, setTempImage] = useState({});
   const [imageuploadProgress, setImageUploadProgress] = useState("");
   const imageRef = useRef();
+
 
   function handelChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -32,6 +39,7 @@ const OnBoarding = () => {
     if (!tempImage.file) {
       return;
     }
+    dispatch(signUpStart())
 
     const fileName = new Date().getTime() + tempImage.file.name;
     const storageRef = ref(storage, fileName);
@@ -45,19 +53,58 @@ const OnBoarding = () => {
         setImageUploadProgress(progress.toFixed(0));
       },
       (error) => {
-        console.log(error);
+dispatch(signUpFailure(error.message))
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
           setForm({ form, profilePicture: downloadUrl });
           setImageUploadProgress(null)
+          dispatch(signupCreated())
         });
       }
     );
   }
+
+
+  async function handelSubmit(e){
+    e.preventDefault()
+
+    dispatch(signUpStart())
+    try{
+
+      const res = await fetch('/api/profile/create', {
+        method:'POST',
+        headers:{
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({...form, userId: currentUser._id})
+
+      })
+
+      const data = await res.json();
+
+      if(!res.ok){
+        return dispatch(signUpFailure(data.message))
+      }
+      dispatch(signUpSuccess(data))
+
+      
+
+
+
+
+
+
+
+
+    }
+    catch(e){
+dispatch(signUpFailure(e.message))
+    }
+  }
   return (
     <div className="min-h-[90vh] w-screen grid place-content-center overflow-x-hidden">
-      <form className="bg-white p-5 flex flex-col gap-4 rounded-lg overflow-hidden shadow-xl border">
+      <form onSubmit={handelSubmit} className="bg-white p-5 flex flex-col gap-4 rounded-lg overflow-hidden shadow-xl border">
         <div className="flex flex-col md:flex-row gap-4 items-center md:justify-between">
           <div
             onClick={() => imageRef.current.click()}
@@ -110,12 +157,12 @@ const OnBoarding = () => {
 
         <div className="flex flex-col gap-3">
           <div className="flex  gap-4">
-            <TextInput
+            <TextInput required
               onChange={handelChange}
               placeholder="first name"
               name="firstName"
             />
-            <TextInput
+            <TextInput required
               onChange={handelChange}
               placeholder="last name"
               name="lastName"
@@ -134,11 +181,23 @@ const OnBoarding = () => {
           </div>
           <div>
             <Textarea
-              onChange={handelChange}
+            required
+              onChange={(event) => {
+                const updatedBio = event.target.value.substring(0, 200);
+                setForm((prevState) => ({ ...prevState, bio: updatedBio }));
+               
+
+               
+
+              }}
+
+              value={form.bio}
+
               name="bio"
               className="p-3 resize-none"
               placeholder="Your Bio"
             />
+            <span className="text-gray-400 mt-2 block">{form.bio ? 200 - form.bio.length :'200'} Characters remaining</span>
           </div>
           <div>
             <h3 className="font-semibold">Choose a Theme</h3>
@@ -148,8 +207,10 @@ const OnBoarding = () => {
             </Select>
           </div>
           <div className="flex justify-end">
-            <Button type="submit" className="w-20" gradientDuoTone={'purpleToPink'}>Save</Button>
+            <Button disabled={loading} type="submit" className="w-20" gradientDuoTone={'purpleToPink'}>{loading ? <Spinner /> :
+            'Save'}</Button>
           </div>
+          {error && <Alert color={'failure'}>{error}</Alert>}
         </div>
       </form>
     </div>
