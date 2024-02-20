@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { TextInput, Button, Modal, useThemeMode } from "flowbite-react";
 import { RiLockPasswordLine, RiMailLine, RiUser2Line } from "react-icons/ri";
-import Countdown from "react-countdown";
+;
 
 
 const Signup = ({ setCurrentState }) => {
@@ -12,10 +12,16 @@ const Signup = ({ setCurrentState }) => {
 
   const [userId, setUserId] = useState();
   const [codeId, setCoceId] = useState();
-
-  const [isPaused, setIsPaused] = useState(true);
   const [resend, setResend] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(5 * 60 * 1000);
+
+  const [remainingTime, setRemainingTime] = useState(5 * 60 * 1000); // 5 minutes in milliseconds
+  const [isStarted, setIsStarted] = useState(false);
+
+
+
+  const minutes = Math.floor(remainingTime / (60 * 1000));
+  const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+
 
   async function verifyCode() {
     const finalCode = vcode.join("");
@@ -61,8 +67,11 @@ const Signup = ({ setCurrentState }) => {
       const data = await res.json();
 
       if (res.ok) {
-        setIsPaused(false);
-        setResend(false)
+        setRemainingTime(5 * 60 * 1000)
+        setIsStarted(true)
+     
+        
+                setResend(false)
         return setCoceId(data);
       } else {
         console.log(data.message);
@@ -104,6 +113,21 @@ const Signup = ({ setCurrentState }) => {
     copyCode[e.target.name] = e.target.value;
     setVcode(copyCode);
   }
+
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (isStarted) {
+        setRemainingTime(prevTime => Math.max(0, prevTime - 1000));
+        if (remainingTime <= 0) {
+          setResend(true)
+
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [isStarted,remainingTime]);
 
   return (
     <div className="shadow-xl  px-8 py-12 flex flex-col gap-12">
@@ -195,14 +219,11 @@ const Signup = ({ setCurrentState }) => {
                 />
               </div>
               {resend ? (
-                <p onClick={sendVerificationCode} className="text-center cursor-pointer mt-3 hover:underline">Resend Code</p>
+                <p onClick={() => sendVerificationCode()} className="text-center cursor-pointer mt-3 hover:underline">Resend Code</p>
               ) : (
-                <Countdown 
-                  date={Date.now() + remainingTime}
-                  paused={isPaused}
-                  onComplete={() => setResend(true)}
-                  renderer={({minutes,seconds}) => (<span className="text-center block mt-2">The code expires in  {`${minutes}:${seconds}`}</span>)}
-                />
+
+<p className="text-center mt-5">Verification Code Expires in <span className="text-semibold">{minutes}:{seconds.toString().padStart(2, '0')}</span></p>
+
               )}
             </Modal.Body>
 
