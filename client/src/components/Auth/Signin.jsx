@@ -3,10 +3,12 @@ import { TextInput, Button, Modal ,Alert,Spinner} from "flowbite-react";
 import { RiLockPasswordLine, RiMailLine } from "react-icons/ri";
 import {signUpSuccess,signUpStart,signUpFailure,signupCreated} from '../../redux/user/userSlice' 
 import {useSelector,useDispatch} from 'react-redux'
-
+import {useNavigate} from 'react-router-dom'
 
 
 const Signin = ({ setCurrentState }) => {
+
+  const navigate = useNavigate(0)
 
   const {loading,error} = useSelector(state => state.user)
 
@@ -59,6 +61,7 @@ const Signin = ({ setCurrentState }) => {
 
       if (res.ok) {
         dispatch(signUpSuccess(data))
+        navigate('/onboarding')
 
       } else {
         dispatch(signUpFailure('Incorrect Code'))
@@ -120,17 +123,23 @@ const Signin = ({ setCurrentState }) => {
       if(data?.unverified){
         setUserId(data.userId);
         setFrom({...form, email:data.email})
-       await sendVerificationCode(data.email);
-       console.log(data)
-return
+      return await sendVerificationCode(data.email);
+
+
 
       }
-      else{
-        console.log(data)
 
-        return dispatch(signUpSuccess(data))
-
+      if(!data.onBoardingComplete){
+        dispatch(signUpSuccess(data))
+        return navigate('/onboarding')
       }
+
+
+
+        dispatch(signUpSuccess(data))
+        return navigate(`/author/${data.username}/profile=tab`)
+
+
 
      
     } catch (e) {

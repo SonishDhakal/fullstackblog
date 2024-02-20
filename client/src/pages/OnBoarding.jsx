@@ -10,12 +10,14 @@ import {
   Textarea,
 } from "flowbite-react";
 import { storage } from "../utils/Firebase";
+import {useNavigate} from 'react-router-dom'
 import { getDownloadURL, uploadBytesResumable, ref } from "firebase/storage";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import {useDispatch,useSelector} from 'react-redux'
 import { signUpFailure, signUpStart, signUpSuccess, signupCreated } from "../redux/user/userSlice";
 const OnBoarding = () => {
+  const navigate = useNavigate()
   const {currentUser,loading,error} = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [form, setForm] = useState({});
@@ -57,7 +59,7 @@ dispatch(signUpFailure(error.message))
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-          setForm({ form, profilePicture: downloadUrl });
+          setForm({ ...form, profilePicture: downloadUrl });
           setImageUploadProgress(null)
           dispatch(signupCreated())
         });
@@ -70,14 +72,16 @@ dispatch(signUpFailure(error.message))
     e.preventDefault()
 
     dispatch(signUpStart())
+    const flatObject = { ...form, userId: currentUser._id };
     try{
+     
 
       const res = await fetch('/api/profile/create', {
         method:'POST',
         headers:{
           'Content-type': 'application/json'
         },
-        body: JSON.stringify({...form, userId: currentUser._id})
+        body: JSON.stringify(flatObject)
 
       })
 
@@ -87,6 +91,7 @@ dispatch(signUpFailure(error.message))
         return dispatch(signUpFailure(data.message))
       }
       dispatch(signUpSuccess(data))
+      navigate(`/author/${currentUser.username}?tab=profile`)
 
       
 

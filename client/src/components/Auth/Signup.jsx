@@ -3,10 +3,12 @@ import { TextInput, Button, Modal, useThemeMode, Spinner,Alert } from "flowbite-
 import { RiLockPasswordLine, RiMailLine, RiUser2Line } from "react-icons/ri";
 import {useSelector,useDispatch} from 'react-redux'
 import {signUpSuccess,signUpStart,signUpFailure,signupCreated} from '../../redux/user/userSlice' 
-
+import {useNavigate} from 'react-router-dom'
 
 
 const Signup = ({ setCurrentState }) => {
+
+  const navigate = useNavigate()
 
   const {loading,error} = useSelector(state => state.user)
 
@@ -56,6 +58,7 @@ const Signup = ({ setCurrentState }) => {
 
       if (res.ok) {
         dispatch(signUpSuccess(data))
+        navigate('/onboarding')
 
       } else {
         dispatch(signUpFailure('Incorrect Code'))

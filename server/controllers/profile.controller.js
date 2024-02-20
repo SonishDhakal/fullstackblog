@@ -1,7 +1,7 @@
 import User from "../modals/user.modal.js";
 import { handelError } from "../utils/handelError.js"
 import Profile from "../../client/src/redux/user/profile.modal.js";
-
+import jwt from 'jsonwebtoken'
 
 export const create = async (req,res,next) =>{
 
@@ -13,6 +13,7 @@ export const create = async (req,res,next) =>{
     }
 
     const {userId} = req.body;
+    console.log(req.body)
 
 
     try{
@@ -33,9 +34,9 @@ export const create = async (req,res,next) =>{
 
         const token = jwt.sign(
             {
-                id:findUserbyemail._id,
-                emailVerified: findUserbyemail.emailVerified,
-                onBoardingComplete:findUserbyemail.onBoardingComplete
+                id:updatedUser._id,
+                emailVerified: updatedUser.emailVerified,
+                onBoardingComplete:updatedUser.onBoardingComplete
 
             },
             process.env.JWT_SECRET
