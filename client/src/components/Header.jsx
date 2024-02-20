@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Navbar, TextInput} from 'flowbite-react'
+import {Avatar, Button, Dropdown, Navbar, TextInput} from 'flowbite-react'
 import {RiSearchLine,RiMoonLine} from 'react-icons/ri'
 import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
@@ -21,7 +21,20 @@ const Header = () => {
 <RiMoonLine />
 </Button>
 {currentUser ? 
-''
+<Dropdown 
+arrowIcon={false}
+inline
+label={<Avatar alt='user settings'  img={currentUser.profilePicture ? currentUser.profilePicture : '/user.png'} rounded />} >
+  <Dropdown.Header>
+    <span className='font-semibold'>@{currentUser.username}</span>
+<p className='truncate text-gray-400'>{currentUser.email}</p>
+  </Dropdown.Header>
+  <Dropdown.Item>Profile</Dropdown.Item>
+  <Dropdown.Item>Dashboard</Dropdown.Item>
+  <Dropdown.Item>Settings</Dropdown.Item>
+  <Dropdown.Item>Signout</Dropdown.Item>
+
+</Dropdown>
  : <Link to={'/auth'}><Button className=' w-28 hover:text-white' gradientDuoTone={'redToYellow'} pill outline>Sign In</Button></Link>}
 
 
