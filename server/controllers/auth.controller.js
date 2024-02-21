@@ -2,6 +2,7 @@ import { handelError } from "../utils/handelError.js";
 import User from "../modals/user.modal.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Profile from "../../client/src/redux/user/profile.modal.js";
 
 export const singup = async (req, res, next) => {
   const { username, password, email } = req.body;
@@ -35,11 +36,13 @@ export const singup = async (req, res, next) => {
 };
 
 export const signin = async (req, res, next) => {
-  const { value, password } = req.body;
+  let { value, password } = req.body;
 
   if (!value || !password) {
     return next(handelError(401, "All the fields are required"));
   }
+
+  value = value.toLowerCase();
 
   const findUserbyUsername = await User.findOne({ username: value });
 
@@ -66,14 +69,12 @@ export const signin = async (req, res, next) => {
     const { password: pass, ...rest } = findUserbyemail._doc;
 
     if (!findUserbyemail.emailVerified) {
-      return res
-        .status(200)
-        .json({
-          unverified: true,
-          userId: findUserbyemail._id,
-          email: findUserbyemail.email,
-        });
-    } else {
+      return res.status(200).json({
+        unverified: true,
+        userId: findUserbyemail._id,
+        email: findUserbyemail.email,
+      });
+    }
       const token = jwt.sign(
         {
           id: findUserbyemail._id,
@@ -83,11 +84,28 @@ export const signin = async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      return res
+      if(!findUserbyemail.onBoardingComplete){
+        return res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
         .json(rest);
-    }
+      }
+
+      const getProfile = await Profile.findOne({
+        userId: findUserbyemail._id,
+      });
+  
+      const { profilePicture, theme } = getProfile._doc;
+  
+      return res
+        .status(200)
+        .cookie("access_token", token, { httpOnly: true })
+        .json({ ...rest, theme, profilePicture });
+
+
+
+     
+    
   } else {
     const checkpassword = bcryptjs.compareSync(
       password,
@@ -98,36 +116,46 @@ export const signin = async (req, res, next) => {
       return next(handelError(401, "Incorrect password"));
     }
 
+    if (!findUserbyUsername.emailVerified) {
+      return res.status(200).json({
+        unverified: true,
+        userId: findUserbyUsername._id,
+        email: findUserbyUsername.email,
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: findUserbyUsername._id,
+        emailVerified: findUserbyUsername.emailVerified,
+        onBoardingComplete: findUserbyUsername.onBoardingComplete,
+      },
+      process.env.JWT_SECRET
+    );
     const { password: pass, ...rest } = findUserbyUsername._doc;
 
-    if (!findUserbyUsername.emailVerified) {
-      return res
-        .status(200)
-        .json({
-          unverified: true,
-          userId: findUserbyUsername._id,
-          email: findUserbyUsername.email,
-        });
-    } else {
-      const token = jwt.sign(
-        {
-          id: findUserbyUsername._id,
-          emailVerified: findUserbyUsername.emailVerified,
-          onBoardingComplete: findUserbyUsername.onBoardingComplete,
-        },
-        process.env.JWT_SECRET
-      );
-
+    if (!findUserbyUsername.onBoardingComplete) {
       return res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
         .json(rest);
     }
+
+    const getProfile = await Profile.findOne({
+      userId: findUserbyUsername._id,
+    });
+
+    const { profilePicture, theme } = getProfile._doc;
+
+    return res
+      .status(200)
+      .cookie("access_token", token, { httpOnly: true })
+      .json({ ...rest, theme, profilePicture });
   }
 };
 
 export const oAuth = async (req, res, next) => {
-    const {email,displayName} = req.body;
+  const { email, displayName } = req.body;
   try {
     const findUser = await User.findOne({ email });
 
@@ -144,32 +172,50 @@ export const oAuth = async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      return res
+      if(!findUser.onBoardingComplete){
+        return res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
         .json(rest);
     }
 
-    //if new account 
+    const getProfile = await Profile.findOne({
+      userId: findUser._id,
+    });
 
-    const password = Math.random().toString(36).slice(-8)
-    const hashedPassword = bcryptjs.hashSync(password,10)
+    const { profilePicture, theme } = getProfile._doc;
 
-    const username = displayName.toLowerCase().trim().split(' ').join('') + Math.random().toString().slice(-4)
+    return res
+      .status(200)
+      .cookie("access_token", token, { httpOnly: true })
+      .json({ ...rest, theme, profilePicture });
 
+    
+
+      }
+
+     
+
+    //if new account
+
+    const password = Math.random().toString(36).slice(-8);
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+
+    const username =
+      displayName.toLowerCase().trim().split(" ").join("") +
+      Math.random().toString().slice(-4);
 
     const newUser = new User({
-        email,
-        username,
-        password:hashedPassword,
-        emailVerified:true,
-        onBoardingComplete:false
-
-    })
+      email,
+      username,
+      password: hashedPassword,
+      emailVerified: true,
+      onBoardingComplete: false,
+    });
 
     await newUser.save();
 
-    const { password:pass, ...rest } = newUser._doc;
+    const { password: pass, ...rest } = newUser._doc;
     const token = jwt.sign(
       {
         id: newUser._id,
@@ -179,19 +225,23 @@ export const oAuth = async (req, res, next) => {
       process.env.JWT_SECRET
     );
 
-    
     return res
-    .status(200)
-    .cookie("access_token", token, { httpOnly: true })
-    .json(rest);
-
-    
-    
-
-
-
-
+      .status(200)
+      .cookie("access_token", token, { httpOnly: true })
+      .json(rest);
   } catch (e) {
     next(e);
   }
 };
+
+
+
+export const signout = (req,res,next) => {
+try{
+  res.clearCookie('access_token').status(200).json("Success")
+
+}
+catch(e){
+  next(e)
+}
+}

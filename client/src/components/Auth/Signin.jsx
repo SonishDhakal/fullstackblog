@@ -107,18 +107,18 @@ const Signin = ({ setCurrentState }) => {
     e.preventDefault();
     dispatch(signUpStart())
 
-    let username = form.username
+ 
 
 
     try {
-      const newForm = { ...form, username: username.toLowerCase() };
+
 
       const newUserId = await fetch("/api/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(newForm),
+        body: JSON.stringify(form),
 
       });
 

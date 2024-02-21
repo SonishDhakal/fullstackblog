@@ -1,10 +1,21 @@
 import React from 'react'
 import {Avatar, Button, Dropdown, Navbar, TextInput} from 'flowbite-react'
 import {RiSearchLine,RiMoonLine} from 'react-icons/ri'
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
+import { signoutSuccess } from '../redux/user/userSlice'
 const Header = () => {
+
   const {currentUser} = useSelector(state => state.user)
+const dispatch = useDispatch()
+
+  async function handleSignout(){
+    const res = await fetch('/api/auth/signout');
+    if(res.ok){
+      dispatch(signoutSuccess())
+    }
+    
+  }
   return (
     <Navbar className='border-b h-[10vh]'>
         <div className='flex gap-2 items-center'>
@@ -32,7 +43,7 @@ label={<Avatar alt='user settings'  img={currentUser.profilePicture ? currentUse
   <Dropdown.Item>Profile</Dropdown.Item>
   <Dropdown.Item>Dashboard</Dropdown.Item>
   <Dropdown.Item>Settings</Dropdown.Item>
-  <Dropdown.Item>Signout</Dropdown.Item>
+  <Dropdown.Item onClick={handleSignout}>Signout</Dropdown.Item>
 
 </Dropdown>
  : <Link to={'/auth'}><Button className=' w-28 hover:text-white' gradientDuoTone={'redToYellow'} pill outline>Sign In</Button></Link>}
