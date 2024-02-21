@@ -95,12 +95,12 @@ export const signin = async (req, res, next) => {
         userId: findUserbyemail._id,
       });
   
-      const { profilePicture, theme } = getProfile._doc;
+      const { profilePicture  } = getProfile._doc;
   
       return res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
-        .json({ ...rest, theme, profilePicture });
+        .json({ ...rest,  profilePicture });
 
 
 
@@ -145,12 +145,12 @@ export const signin = async (req, res, next) => {
       userId: findUserbyUsername._id,
     });
 
-    const { profilePicture, theme } = getProfile._doc;
+    const { profilePicture } = getProfile._doc;
 
     return res
       .status(200)
       .cookie("access_token", token, { httpOnly: true })
-      .json({ ...rest, theme, profilePicture });
+      .json({ ...rest,  profilePicture });
   }
 };
 
@@ -183,12 +183,12 @@ export const oAuth = async (req, res, next) => {
       userId: findUser._id,
     });
 
-    const { profilePicture, theme } = getProfile._doc;
+    const { profilePicture  } = getProfile._doc;
 
     return res
       .status(200)
       .cookie("access_token", token, { httpOnly: true })
-      .json({ ...rest, theme, profilePicture });
+      .json({ ...rest, profilePicture });
 
     
 

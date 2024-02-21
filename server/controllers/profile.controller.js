@@ -30,7 +30,7 @@ export const create = async (req,res,next) =>{
 
         const {password, ...rest} = updatedUser._doc;
 
-        const newObject = {...rest, profilePicture:newProfile.profilePicture, theme:newProfile.theme}
+        const newObject = {...rest, profilePicture:newProfile.profilePicture}
 
         const token = jwt.sign(
             {

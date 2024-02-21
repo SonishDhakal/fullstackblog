@@ -23,10 +23,6 @@ const profileSchema = new mongoose.Schema({
         default:[],
         type:Array
     },
-    theme:{
-        type: String,
-        default:'light'
-    },
     profilePicture:{
         type:String,
         default: 'https://firebasestorage.googleapis.com/v0/b/fullstackblogapp.appspot.com/o/user.png?alt=media&token=ae55119c-08d8-48c6-9077-0428916e2503'

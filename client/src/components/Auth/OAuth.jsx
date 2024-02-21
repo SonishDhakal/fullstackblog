@@ -20,7 +20,7 @@ const OAuth = () => {
   async function handelOAuth() {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
-    dispatch(signUpStart);
+    dispatch(signUpStart());
     try {
       const account = await signInWithPopup(auth, provider);
       const { user } = account;

@@ -204,13 +204,7 @@ dispatch(signUpFailure(e.message))
             />
             <span className="text-gray-400 mt-2 block">{form.bio ? 200 - form.bio.length :'200'} Characters remaining</span>
           </div>
-          <div>
-            <h3 className="font-semibold">Choose a Theme</h3>
-            <Select name="theme" onChange={handelChange} className="mt-2">
-              <option value={"light"}>Light</option>
-              <option value={"dark"}>Dark</option>
-            </Select>
-          </div>
+     
           <div className="flex justify-end">
             <Button disabled={loading} type="submit" className="w-20" gradientDuoTone={'purpleToPink'}>{loading ? <Spinner /> :
             'Save'}</Button>
