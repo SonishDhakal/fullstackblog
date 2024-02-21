@@ -4,6 +4,7 @@ import { RiLockPasswordLine, RiMailLine } from "react-icons/ri";
 import {signUpSuccess,signUpStart,signUpFailure,signupCreated} from '../../redux/user/userSlice' 
 import {useSelector,useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+import OAuth from "./OAuth";
 
 
 const Signin = ({ setCurrentState }) => {
@@ -106,14 +107,19 @@ const Signin = ({ setCurrentState }) => {
     e.preventDefault();
     dispatch(signUpStart())
 
+    let username = form.username
+
 
     try {
+      const newForm = { ...form, username: username.toLowerCase() };
+
       const newUserId = await fetch("/api/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(newForm),
+
       });
 
       const data = await newUserId.json();
@@ -205,6 +211,7 @@ const Signin = ({ setCurrentState }) => {
         >
 {loading ? <Spinner /> : 'Sign in'}
         </Button>
+        <OAuth />
 
 
         <span>
@@ -216,7 +223,7 @@ const Signin = ({ setCurrentState }) => {
             Signup
           </span>
         </span>
-        {!modal && error && <Alert color={'failure'}>{error}</Alert> }
+        {!modal && error && <Alert color={'failure'} className="max-w-[350px] mx-auto">{error}</Alert> }
 
 
      

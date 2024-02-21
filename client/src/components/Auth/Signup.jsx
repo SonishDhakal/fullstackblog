@@ -4,6 +4,7 @@ import { RiLockPasswordLine, RiMailLine, RiUser2Line } from "react-icons/ri";
 import {useSelector,useDispatch} from 'react-redux'
 import {signUpSuccess,signUpStart,signUpFailure,signupCreated} from '../../redux/user/userSlice' 
 import {useNavigate} from 'react-router-dom'
+import OAuth from "./OAuth";
 
 
 const Signup = ({ setCurrentState }) => {
@@ -102,15 +103,39 @@ dispatch(signUpFailure(e.message))
   async function handelSubmit(e) {
     e.preventDefault();
     dispatch(signUpStart())
+
+
+   
+
+
+
+    const regex = /^[a-zA-Z0-9_]+$/; 
+    if (!regex.test(form.username)) {
+return dispatch(signUpFailure('Username can only contain letters, numbers, and no spaces'))
+    }
+
+    const PasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    if(!PasswordRegex.test(form.password)){
+return dispatch(signUpFailure('Password must contain at least 8 characters, 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special symbol.'))
+
+    }
+
+    let username = form.username
+
+
+
+
+
     
 
     try {
+      const newForm = { ...form, username: username.toLowerCase() };
       const newUserId = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(newForm),
       });
 
       const data = await newUserId.json();
@@ -154,7 +179,7 @@ dispatch(signUpFailure(e.message))
     <div className="shadow-xl  px-8 py-12 flex flex-col gap-12">
       <div>
         <h2 className="text-lf lg:text-2xl text-center">
-          Signup from your account to use all
+          Create a new account and enjoy all
           <br /> the features!
         </h2>
       </div>
@@ -195,6 +220,7 @@ dispatch(signUpFailure(e.message))
         >
         {loading ? <Spinner /> : 'Sign up'}
         </Button>
+        <OAuth />
 
         <span>
           Don't have an account?{" "}
@@ -205,7 +231,7 @@ dispatch(signUpFailure(e.message))
             Signin
           </span>
         </span>
-        {!modal && error && <Alert color={'failure'}>{error}</Alert> }
+        {!modal && error && <Alert className=" max-w-[350px] mx-auto" color={'failure'}>{error}</Alert> }
 
         <Modal
           className=""

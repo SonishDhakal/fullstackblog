@@ -6,14 +6,14 @@ import jwt from 'jsonwebtoken'
 export const create = async (req,res,next) =>{
 
     const { onBoardingComplete,emailVerified} = req.user
-    console.log(onBoardingComplete,emailVerified)
+
 
     if(onBoardingComplete || !emailVerified){
         return next(handelError(401, "UnAuthorized"))
     }
 
     const {userId} = req.body;
-    console.log(req.body)
+
 
 
     try{
