@@ -6,7 +6,7 @@ import Signin from '../components/Auth/Signin'
 const Auth = () => {
     const [currentState, setCurrentState] = useState('signin')
   return (
-    <div className='max-w-screen min-h-[90vh] grid place-content-center my-4'>
+    <div className='max-w-screen min-h-[80vh] grid place-content-center my-4'>
         {currentState==='signin' ? <Signin setCurrentState={setCurrentState} /> : <Signup setCurrentState={setCurrentState}  /> }
     </div>
 

@@ -1,12 +1,15 @@
 import React from 'react'
 import {Avatar, Button, Dropdown, Navbar, TextInput} from 'flowbite-react'
-import {RiSearchLine,RiMoonLine} from 'react-icons/ri'
+import {RiSearchLine,RiMoonLine, RiSunLine} from 'react-icons/ri'
 import {useSelector,useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
 import { signoutSuccess } from '../redux/user/userSlice'
+import { changeTheme } from '../redux/theme/themeSlice'
 const Header = () => {
 
   const {currentUser} = useSelector(state => state.user)
+  const {theme} = useSelector(state => state.theme)
+  
 const dispatch = useDispatch()
 
   async function handleSignout(){
@@ -17,7 +20,7 @@ const dispatch = useDispatch()
     
   }
   return (
-    <Navbar className='border-b h-[10vh]'>
+    <Navbar className='border-b border-2 bg-transparent '>
         <div className='flex gap-2 items-center'>
         <Navbar.Brand as={'a'} href='/'>
             <img className='w-40' src='/logo.png' />
@@ -28,9 +31,11 @@ const dispatch = useDispatch()
         </Button>
         </div>
         <div className='flex gap-3 items-center'>
-        <Button className='w-10 h-10' pill color='gray'>
-<RiMoonLine />
-</Button>
+   
+          {theme === 'light'?      <Button  onClick={() => dispatch(changeTheme())} className='w-10 h-10' pill color='gray'> <RiMoonLine /> </Button> :     <Button  onClick={() => dispatch(changeTheme())} className='w-10 h-10' pill color='gray'><RiSunLine  /> </Button>}
+
+
+
 {currentUser ? 
 <Dropdown 
 arrowIcon={false}

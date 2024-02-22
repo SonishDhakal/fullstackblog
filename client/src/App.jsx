@@ -10,7 +10,7 @@ import Author from './pages/Author'
 const App = () => {
   return (
     <BrowserRouter>
-    <div>
+
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -20,7 +20,7 @@ const App = () => {
 
       </Routes>
 
-    </div>
+
     </BrowserRouter>
 
 
