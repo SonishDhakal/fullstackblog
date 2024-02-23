@@ -7,12 +7,12 @@ import 'quill-image-uploader/dist/quill.imageUploader.min.css';
 import { storage } from '../../utils/Firebase';
 import {Modal,Spinner} from 'flowbite-react'
 
-const TextEditor = () => {
+const TextEditor = ({form,setForm}) => {
   const [imageUrl, setImageUrl] = useState('')
 
   const [modal,setModal] = useState(false)
 
-  const [content,setContent] = useState('')
+
   const ReactQuillRef = useRef(null);
 
 function uploadImage(file) {
@@ -75,16 +75,30 @@ setModal(false)
   },[imageUrl])
   
 
+  function handelTitle(e){
+    setForm({...form, title:e.target.value})
+
+    let slug = e.target.value;
+    slug = slug.trim();
+    const words = slug.split(/\s+/);
+    slug = words
+    .map(word => word.replace(/^[-_]|[-_]$/g, ""))
+    .join("-");
+
+    const cleanSlug = slug.replace(new RegExp('@', "g"), "").toLowerCase();
+    setForm({...form, slug:cleanSlug})
+
+  }
   
 
 
   return (
     <div className='flex-1 flex flex-col gap-8'>
       <div>
-        <input placeholder='Title here...' className='border-b-2 focus:border-gray-500 border-transparent w-full px-2 py-3 md:text-3xl text-xl font-semibold  resize-none outline-none focus:border-b-2  bg-transparent  '/>
+        <input value={form?.title} onChange={handelTitle}  placeholder='Title here...' className='border-b-2 focus:border-gray-500 border-transparent w-full px-2 py-3 md:text-3xl text-xl font-semibold  resize-none outline-none focus:border-b-2  bg-transparent  '/>
       </div>
       <ReactQuill  
-      onChange={(value) => setContent(value)}
+      onChange={(value) => setForm({...form, content:value})}
 
       ref={ReactQuillRef}
       theme="snow"
@@ -131,7 +145,7 @@ setModal(false)
         "code-block",
       ]}
 
-      value={content}
+      value={form?.content}
      
     
 
