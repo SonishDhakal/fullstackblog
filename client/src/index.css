@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ql-editor img{
+    width: 300px;
+    height: 150px;
+    object-fit: contain;
+    background-position: center;
+    margin: 0 auto ;
+
+}
+
+.ql-editor.ql-blank::before{
+    font-size: 1.7rem;
+    color: gray;
+
+}

@@ -6,6 +6,7 @@ import Auth from './pages/Auth'
 import Home from './pages/Home'
 import OnBoarding from './pages/OnBoarding'
 import Author from './pages/Author'
+import Write from './pages/Write'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path='/auth' element={<Auth />} />
         <Route path='/onboarding' element={<OnBoarding />} />
         <Route path='/author/:authorId' element={<Author />} />
+        <Route path='/write' element={<Write />} />
 
       </Routes>
 

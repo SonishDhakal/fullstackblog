@@ -109,7 +109,7 @@ dispatch(signUpFailure(e.message))
   }
   return (
     <div className="min-h-[90vh] w-screen grid place-content-center overflow-x-hidden">
-      <form onSubmit={handelSubmit} className="bg-white p-5 flex flex-col gap-4 rounded-lg overflow-hidden shadow-xl border">
+      <form onSubmit={handelSubmit} className=" p-5 flex flex-col gap-4 rounded-lg overflow-hidden shadow-xl border-gray-600 border" >
         <div className="flex flex-col md:flex-row gap-4 items-center md:justify-between">
           <div
             onClick={() => imageRef.current.click()}
