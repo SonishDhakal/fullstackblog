@@ -1,6 +1,7 @@
 
-import { type } from 'express/lib/response'
+
 import mongoose from 'mongoose'
+
 
 
 const postScheam = new mongoose.Schema({
@@ -11,6 +12,7 @@ const postScheam = new mongoose.Schema({
     postId:{
         type:String,
         required:true
+
     },
 
     published:{
@@ -19,20 +21,20 @@ const postScheam = new mongoose.Schema({
     },
     slug:{
         type:String,
-        required:true,
-        unique:true,
+
+
     },
     title:{
         type:String,
-        required:true,
+
     },
     content:{
         type:String,
-        required:true,
+
     },
     category:{
         type:String,
-        required:true,
+
     },
     tags:{
         type:Array,

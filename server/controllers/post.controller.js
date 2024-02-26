@@ -1,5 +1,5 @@
-import Post from "../modals/post.modal";
-import { handelError } from "../utils/handelError";
+import Post from "../modals/post.modal.js";
+import { handelError } from "../utils/handelError.js";
 
 export const createPost = async (req, res, next) => {
   const { slug, postId, content, title, featuredImage, category, tags } =
@@ -9,6 +9,11 @@ export const createPost = async (req, res, next) => {
   }
 
   try {
+
+    const checkSlug = await Post.findOne({ slug });
+    if (checkSlug) {
+      return next(handelError(402, "Slug is not available"));
+    }
     //check if new or draft
 
     const checkPost = await Post.findOne({ postId });
@@ -26,10 +31,7 @@ export const createPost = async (req, res, next) => {
 
     //check Slug
 
-    const checkSlug = await Post.findOne({ slug: slug });
-    if (checkSlug) {
-      return next(handelError(400, "Slug is not available"));
-    }
+    
 
     //create post
 
@@ -76,9 +78,7 @@ export const CreateDraft = async (req, res, next) => {
 
     // if new draft
 
-    if (!postId || !req.user.id || !content || !slug || !title) {
-      return next(handelError(400, "All fields are required"));
-    }
+  
 
     const createPost = new Post({
       postId,

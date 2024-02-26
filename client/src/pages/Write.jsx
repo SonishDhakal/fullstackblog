@@ -17,18 +17,18 @@ const Write = () => {
   useEffect(() =>{
     const urlParams =  new URLSearchParams(location.search)
     const tabFrom = urlParams.get('draft');
-    const posdId = urlParams.get('id')
+    const postId = urlParams.get('id')
 
     if(tabFrom===null){
 
-      if(!posdId){
+      if(!postId){
 
         const id = uuid();
 
        return navigate(`/write?id=${id}`)
       }
 
-      setForm(prevForm => ({...prevForm,posdId}))
+      setForm(prevForm => ({...prevForm,postId}))
     }
     
     setTab(tabFrom)

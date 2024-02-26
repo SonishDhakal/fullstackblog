@@ -11,12 +11,43 @@ const TextEditorSidebar = ({ form, setForm }) => {
   const [tempImage, setTempImage] = useState({});
   const [imageuploadProgress, setImageUploadProgress] = useState("");
   const imageRef = useRef();
+  const [error,setError] = useState('');
+  const [slugError,setSlugError] = useState('');
 
   function handelTags(e) {
     const tags = e.target.value;
     const tagsArray = tags.split(",");
     const removeWhiteSpace = tagsArray.map((tag) => tag.trim(0));
     setForm({ ...form, tags: removeWhiteSpace });
+  }
+
+  async function handelDraft(){
+    setError('');
+    setSlugError('')
+    try{
+      const res = await fetch('/api/post/draft', {
+        method:'POST',
+        headers:{
+          'Content-type': 'application/json'
+        },
+        body:JSON.stringify(form)
+
+      })
+
+      const data = await res.json();
+
+      if(!res.ok){
+       return setError(data.message)
+        
+      }
+      console.log(data)
+
+    }
+    catch(e){
+      setError(e.message)
+
+    }
+
   }
 
   function handelImageChange(e) {
@@ -64,7 +95,7 @@ const TextEditorSidebar = ({ form, setForm }) => {
       <div className="dark:bg-gray-700 bg-gray-100/[0.8] py-3 px-5 rounded-lg flex flex-col gap-4">
         <h3 className="text-lg font-semibold">Publish Article</h3>
         <div className="flex gap-2">
-          <Button outline className="w-15  text-xs">
+          <Button onClick={handelDraft} outline className="w-15  text-xs">
             Save Draft
           </Button>
           <Button className="w-15  text-xs">Publish</Button>
