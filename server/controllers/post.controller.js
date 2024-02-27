@@ -124,3 +124,45 @@ export const CreateDraft = async (req, res, next) => {
     next(e);
   }
 };
+
+
+export const getPost = async (req,res,next) =>{
+  try{
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortDirection = req.query.order === 'asc' ? 1 : -1;
+
+    const posts = await Post.find({
+      ...(req.query.userId && {userId:req.query.userId}),
+      ...(req.query.category && {category:req.query.category}),
+      ...(req.query.slug && {slug:req.query.slug}),
+      ...(req.query.postId && {postId:req.query.postId}),
+      ...(req.query.published && {published:req.query.published}),
+      $or:[
+        {title:{$regex: req.query.searchTerm, $options:"i"}},
+        {tags:{$regex: req.query.searchTerm, $options:"i"}},
+        {content:{$regex: req.query.searchTerm, $options:"i"}},
+      ]
+
+
+
+    })
+
+    if(posts){
+      res.status(200).json(posts)
+
+    }
+    else{
+      next(handelError(404, "No posts found"))
+    }
+
+  }
+
+  
+  catch(e){
+    next(e)
+  }
+
+
+
+}

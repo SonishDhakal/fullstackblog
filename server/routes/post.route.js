@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.post('/create', verifyToken, createPost)
 router.post('/draft', verifyToken, CreateDraft)
+router.get('/getposts', getPost)
 
 export default router
