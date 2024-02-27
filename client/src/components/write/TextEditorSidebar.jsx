@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
+import { Alert, Button, Label, Select, Spinner, TextInput, Textarea } from "flowbite-react";
 
 import { useNavigate,Link } from "react-router-dom";
 import { getDownloadURL, uploadBytesResumable, ref } from "firebase/storage";
@@ -7,11 +7,13 @@ import { storage } from "../../utils/Firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-const TextEditorSidebar = ({ form, setForm }) => {
+const TextEditorSidebar = ({ form, setForm,error,setError,setLoading,loading }) => {
   const [tempImage, setTempImage] = useState({});
   const [imageuploadProgress, setImageUploadProgress] = useState("");
   const imageRef = useRef();
-  const [error,setError] = useState('');
+  const navigate = useNavigate()
+
+
   const [slugError,setSlugError] = useState('');
 
   function handelTags(e) {
@@ -24,6 +26,7 @@ const TextEditorSidebar = ({ form, setForm }) => {
   async function handelPost(){
     setError('');
     setSlugError('')
+    setLoading(true)
     try{
       const res = await fetch('/api/post/create', {
         method:'POST',
@@ -39,16 +42,24 @@ const TextEditorSidebar = ({ form, setForm }) => {
       if(!res.ok){
 
         if(!res.status===403){
+          setLoading(false)
 
           return setSlugError(data.message)
         }
+        setLoading(false)
+
        return setError(data.message)
         
       }
-      console.log(data)
+      setLoading(false);
+
+
+      navigate(`/@${data.username}/${data.slug}`)
 
     }
     catch(e){
+      setLoading(false)
+
       setError(e.message)
 
     }
@@ -58,6 +69,8 @@ const TextEditorSidebar = ({ form, setForm }) => {
   async function handelDraft(){
     setError('');
     setSlugError('')
+    setLoading(true)
+
     try{
       const res = await fetch('/api/post/draft', {
         method:'POST',
@@ -71,13 +84,19 @@ const TextEditorSidebar = ({ form, setForm }) => {
       const data = await res.json();
 
       if(!res.ok){
+        setLoading(false)
+
        return setError(data.message)
         
       }
+      setLoading(false)
+
       console.log(data)
 
     }
     catch(e){
+      setLoading(false)
+
       setError(e.message)
 
     }
@@ -100,6 +119,7 @@ const TextEditorSidebar = ({ form, setForm }) => {
     const fileName = new Date().getTime() + tempImage.file.name;
     const storageRef = ref(storage, fileName);
 
+    setLoading(true)
     const uploadTask = uploadBytesResumable(storageRef, tempImage.file);
 
     uploadTask.on(
@@ -109,14 +129,17 @@ const TextEditorSidebar = ({ form, setForm }) => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImageUploadProgress(progress.toFixed(0));
       },
-      (error) => {
-        // dispatch(signUpFailure(error.message))
+      (e) => {
+setError(e.message)
+setLoading(false)
+
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
           setForm({ ...form, featuredImage: downloadUrl });
           setImageUploadProgress(null);
-          // dispatch(signupCreated())
+          setLoading(false)
+
         });
       }
     );
@@ -129,10 +152,10 @@ const TextEditorSidebar = ({ form, setForm }) => {
       <div className="dark:bg-gray-700 bg-gray-100/[0.8] py-3 px-5 rounded-lg flex flex-col gap-4">
         <h3 className="text-lg font-semibold">Publish Article</h3>
         <div className="flex gap-2">
-          <Button onClick={handelDraft} outline className="w-15  text-xs">
-            Save Draft
+          <Button disabled={loading} onClick={handelDraft} outline className="w-15  text-xs">
+          {loading ? <Spinner/> : 'Save Draft'}
           </Button>
-          <Button onClick={handelPost} className="w-15  text-xs">Publish</Button>
+          <Button disabled={loading} onClick={handelPost} className="w-15  text-xs">{loading ? <Spinner/> : 'Save & Publish '}</Button>
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="slug">Slug</Label>
@@ -143,6 +166,7 @@ const TextEditorSidebar = ({ form, setForm }) => {
             name="slug"
           />
         </div>
+        {slugError && <Alert color={'failure'}>{slugError}</Alert>}
         <Link to={'/write?draft=preview'}>Preview here </Link>
       </div>
       {/* featured image */}
@@ -200,7 +224,7 @@ const TextEditorSidebar = ({ form, setForm }) => {
           {/* img */}
         </div>
 
-        <Button onClick={uploadImage}>Upload</Button>
+        <Button disabled={loading} onClick={uploadImage}>{loading ? <Spinner/> : 'Upload '}</Button>
       </div>
       {/* /OHTER */}
       <div className="flex flex-col gap-4 dark:bg-gray-700 bg-gray-100/[0.8] py-3 px-5 rounded-lg ">
@@ -208,9 +232,13 @@ const TextEditorSidebar = ({ form, setForm }) => {
         <div>
           <Label htmlFor="category">Category</Label>
           <Select
-            onChange={(e) => setForm({ ...form, category: e.traget.value })}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
           >
+            <option value={"uncategorized"}>Uncategorized</option>
             <option value={"nextjs"}>Next js</option>
+            <option value={"js"}>Js</option>
+            <option value={"reacjs"}>React js</option>
+            <option value={"vuejs"}>Vue js</option>
           </Select>
         </div>
         <div className="flex flex-col gap-3">

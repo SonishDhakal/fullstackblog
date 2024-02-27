@@ -2,7 +2,7 @@ import Post from "../modals/post.modal.js";
 import { handelError } from "../utils/handelError.js";
 
 export const createPost = async (req, res, next) => {
-  const { slug, postId, content, title, featuredImage, category, tags } =
+  const { slug, postId, content, title, featuredImage, category, tags,username } =
     req.body;
   if (!req.user.onBoardingComplete) {
     return next(handelError(403, "Onboarding Error"));
@@ -72,6 +72,7 @@ export const createPost = async (req, res, next) => {
       featuredImage,
       category,
       tags,
+      username
     });
     await createPost.save();
     return res.status(200).json(createPost);
@@ -81,7 +82,7 @@ export const createPost = async (req, res, next) => {
 };
 
 export const CreateDraft = async (req, res, next) => {
-  const { slug, postId, content, title, featuredImage, category, tags } =
+  const { slug, postId, content, title, featuredImage, category, tags,username } =
     req.body;
   if (!req.user.onBoardingComplete) {
     return next(handelError(403, "Onboarding Error"));
@@ -114,6 +115,8 @@ export const CreateDraft = async (req, res, next) => {
       category,
       tags,
       published: false,
+      username
+
     });
     await createPost.save();
     return res.status(200).json(createPost);

@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import OnBoarding from './pages/OnBoarding'
 import Author from './pages/Author'
 import Write from './pages/Write'
+import PostTemplate from './pages/PostTemplate'
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path='/onboarding' element={<OnBoarding />} />
         <Route path='/author/:authorId' element={<Author />} />
         <Route path='/write' element={<Write />} />
+        <Route path='/:username/:slug' element={<PostTemplate />}  />
 
       </Routes>
 

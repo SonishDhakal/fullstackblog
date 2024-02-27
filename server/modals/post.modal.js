@@ -44,6 +44,9 @@ const postScheam = new mongoose.Schema({
     },
     featuredImage:{
         type:String
+    },
+    username:{
+        type:String
     }
 
    
