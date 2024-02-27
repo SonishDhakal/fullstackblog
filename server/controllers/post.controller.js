@@ -10,18 +10,40 @@ export const createPost = async (req, res, next) => {
 
   try {
 
-    const checkSlug = await Post.findOne({ slug });
-    if (checkSlug) {
-      return next(handelError(402, "Slug is not available"));
+    if (!postId || !req.user.id || !content || !slug || !title) {
+      return next(handelError(400, "All fields are required"));
     }
+
+
+    
     //check if new or draft
 
     const checkPost = await Post.findOne({ postId });
     // if draft
     if (checkPost) {
+      const checkSlug = await Post.findOne({ slug, userId: req.user.id });
+      if(checkSlug){
+        if(checkSlug.postId===postId){
+          const updatePost = await Post.findByIdAndUpdate(
+            checkPost._id,
+            { published: true, slug, postId, content, title, featuredImage, category, tags},
+            { new: true }
+          );
+          return res.status(200).json(updatePost);
+
+        }
+        else{
+          return next(handelError(403, "Slug is not available"));
+  
+        }
+        
+
+      }
+     
+      
       const updatePost = await Post.findByIdAndUpdate(
         checkPost._id,
-        { published: true },
+        { published: true, slug, postId, content, title, featuredImage, category, tags},
         { new: true }
       );
       return res.status(200).json(updatePost);
@@ -35,8 +57,10 @@ export const createPost = async (req, res, next) => {
 
     //create post
 
-    if (!postId || !req.user.id || !content || !slug || !title) {
-      return next(handelError(400, "All fields are required"));
+    const checkSlug = await Post.findOne({ slug, userId: req.user.id });
+
+    if (checkSlug) {
+      return next(handelError(403, "Slug is not available"));
     }
 
     const createPost = new Post({

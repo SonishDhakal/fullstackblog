@@ -34,6 +34,7 @@ const postScheam = new mongoose.Schema({
     },
     category:{
         type:String,
+        default:'uncategorized'
 
     },
     tags:{

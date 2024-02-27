@@ -76,7 +76,7 @@ setModal(false)
   
 
   function handelTitle(e){
-    setForm({...form, title:e.target.value})
+
 
     let slug = e.target.value;
     slug = slug.trim();
@@ -86,7 +86,7 @@ setModal(false)
     .join("-");
 
     const cleanSlug = slug.replace(new RegExp('@', "g"), "").toLowerCase();
-    setForm({...form, slug:cleanSlug})
+    setForm({...form, slug:cleanSlug,title:e.target.value})
 
   }
   

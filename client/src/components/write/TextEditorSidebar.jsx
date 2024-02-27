@@ -21,6 +21,40 @@ const TextEditorSidebar = ({ form, setForm }) => {
     setForm({ ...form, tags: removeWhiteSpace });
   }
 
+  async function handelPost(){
+    setError('');
+    setSlugError('')
+    try{
+      const res = await fetch('/api/post/create', {
+        method:'POST',
+        headers:{
+          'Content-type': 'application/json'
+        },
+        body:JSON.stringify(form)
+
+      })
+
+      const data = await res.json();
+
+      if(!res.ok){
+
+        if(!res.status===403){
+
+          return setSlugError(data.message)
+        }
+       return setError(data.message)
+        
+      }
+      console.log(data)
+
+    }
+    catch(e){
+      setError(e.message)
+
+    }
+
+  }
+
   async function handelDraft(){
     setError('');
     setSlugError('')
@@ -98,7 +132,7 @@ const TextEditorSidebar = ({ form, setForm }) => {
           <Button onClick={handelDraft} outline className="w-15  text-xs">
             Save Draft
           </Button>
-          <Button className="w-15  text-xs">Publish</Button>
+          <Button onClick={handelPost} className="w-15  text-xs">Publish</Button>
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="slug">Slug</Label>
