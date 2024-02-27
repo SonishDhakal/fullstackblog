@@ -7,6 +7,7 @@ import 'quill-image-uploader/dist/quill.imageUploader.min.css';
 import { storage } from '../../utils/Firebase';
 import {Modal,Spinner} from 'flowbite-react'
 
+
 const TextEditor = ({form,setForm}) => {
   const [imageUrl, setImageUrl] = useState('')
 
@@ -106,7 +107,7 @@ setModal(false)
       modules={{
         toolbar: {
           container: [
-            [{ header: "1" }, { header: "2" }, { font: [] }],
+            [{ header: "1" }, { header: "2" } ,{ font: [] }],
             [{ size: [] }],
             ["bold", "italic", "underline", "strike", "blockquote"],
             [

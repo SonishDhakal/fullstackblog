@@ -44,7 +44,7 @@ const Write = () => {
   return tab==='preview' ? <Preview form={form && form} /> :
   <>
 {error && <div className='container mx-auto mt-2'><Alert className='w-max' color={'failure'}>{error}</Alert></div>}
-<div className='container mx-auto flex gap-12 my-4 '>
+<div className='px-4 md:px-0 container mx-auto flex gap-12 my-4 flex-col  md:flex-row '>
         <TextEditor error={error} setError={setError} form={form} setForm={setForm}  />
         <TextEditorSidebar loading={loading} setLoading={setLoading} error={error} setError={setError} form={form} setForm={setForm} />
     </div>
