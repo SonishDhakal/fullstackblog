@@ -4,9 +4,7 @@ import { handelError } from "../utils/handelError.js";
 export const createPost = async (req, res, next) => {
   const { slug, postId, content, title, featuredImage, category, tags,username } =
     req.body;
-  if (!req.user.onBoardingComplete) {
-    return next(handelError(403, "Onboarding Error"));
-  }
+
 
   try {
 
@@ -84,9 +82,7 @@ export const createPost = async (req, res, next) => {
 export const CreateDraft = async (req, res, next) => {
   const { slug, postId, content, title, featuredImage, category, tags,username } =
     req.body;
-  if (!req.user.onBoardingComplete) {
-    return next(handelError(403, "Onboarding Error"));
-  }
+
 
   //if new draft or old draft
 
@@ -165,6 +161,43 @@ export const getPost = async (req,res,next) =>{
     next(e)
   }
 
+
+
+}
+
+export const like = async (req,res,next) =>{
+  const {id} = req.user
+  const {postId} = req.params;
+
+
+  try{
+
+    const getPost = await Post.findOne({postId});
+
+
+    const likeUser = getPost.likes;
+
+    const hasLiked = likeUser.includes(id);
+
+
+    if(!hasLiked){
+      const updatesLikes = [...likeUser, id]
+      const updatePost = await Post.findByIdAndUpdate(getPost._id, {likes:updatesLikes}, {new:true})
+      return res.status(200).json(updatePost)
+    }
+    else{
+      const updatesLikes = likeUser.filter(item => item !==id)
+      const updatePost = await Post.findByIdAndUpdate(getPost._id, {likes:updatesLikes}, {new:true})
+      return res.status(200).json(updatePost)
+
+    }
+
+    
+
+  }
+  catch(e){
+    next(e)
+  }
 
 
 }

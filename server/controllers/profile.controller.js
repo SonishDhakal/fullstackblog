@@ -51,3 +51,85 @@ export const create = async (req,res,next) =>{
     }
 
 }
+
+export const getProfile = async (req,res,next) =>{
+    const {userId} = req.params;
+
+    try{
+
+        const findProfile =await Profile.findOne({userId})
+        if(!findProfile){
+            next(handelError(404, "Profile Not found"))
+        }
+        else{
+            const {profilePicture,firstName,lastName} = findProfile; 
+            res.status(200).json({profilePicture,firstName,lastName})
+        }
+
+
+    }
+    catch(e){
+        next(e)
+    }
+}
+export const getMyProfile = async (req,res,next) =>{
+    const {id} = req.user
+
+    try{
+
+        const findProfile =await Profile.findOne({userId:id})
+        if(!findProfile){
+            next(handelError(404, "Profile Not found"))
+        }
+        else{
+            const {following,bookmarks} = findProfile; 
+            res.status(200).json({following,bookmarks})
+        }
+
+
+    }
+    catch(e){
+        next(e)
+    }
+}
+
+export const addbookmark = async (req,res,next) =>{
+    const {id} = req.user
+    const {postId} = req.params;
+    try{
+
+        const getProfile = await Profile.findOne({userId:id});
+    
+    
+        const bookmarks = getProfile.bookmarks
+
+    
+        const hasbookmarked = bookmarks.includes(postId);
+
+    
+    
+        if(!hasbookmarked){
+
+          const updatesBookmark = [...bookmarks, postId]
+          console.log(updatesBookmark)
+
+          const updatePost = await Profile.findByIdAndUpdate(getProfile._id, {bookmarks:updatesBookmark}, {new:true})
+          const {following,bookmarks:book} = updatePost; 
+          return res.status(200).json({following,bookmarks:book})
+        }
+        else{
+          const updatesBookmark = bookmarks.filter(item => item !==postId)
+          const updatePost = await Profile.findByIdAndUpdate(getProfile._id, {bookmarks:updatesBookmark}, {new:true})
+          const {following,bookmarks:book} = updatePost; 
+          return res.status(200).json({following,bookmarks:book})
+    
+        }
+    
+        
+    
+      }
+      catch(e){
+        next(e)
+      }
+    
+}

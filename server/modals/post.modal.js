@@ -47,10 +47,13 @@ const postScheam = new mongoose.Schema({
     },
     username:{
         type:String
+    },
+    likes:{
+        type:Array
     }
 
    
-})
+},{timestamps:true})
 
 
 const Post = mongoose.model('Post', postScheam);
