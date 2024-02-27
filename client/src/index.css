@@ -17,3 +17,11 @@
 
 
 }
+
+.postContainer h1, .container h2{
+    margin:1rem 0;
+}
+
+.postContainer p{
+    margin: .5rem 0;
+}

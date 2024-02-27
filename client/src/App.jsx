@@ -22,6 +22,7 @@ const App = () => {
         <Route path='/write' element={<Write />} />
         <Route path='/:username/:slug' element={<PostTemplate />}  />
 
+
       </Routes>
 
 
