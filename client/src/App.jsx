@@ -18,7 +18,7 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/auth' element={<Auth />} />
         <Route path='/onboarding' element={<OnBoarding />} />
-        <Route path='/author/:authorId' element={<Author />} />
+        <Route path='/:authorId' element={<Author />} />
         <Route path='/write' element={<Write />} />
         <Route path='/:username/:slug' element={<PostTemplate />}  />
 

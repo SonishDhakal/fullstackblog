@@ -73,17 +73,21 @@ export const getProfile = async (req,res,next) =>{
     }
 }
 export const getMyProfile = async (req,res,next) =>{
-    const {id} = req.user
+const {username} = req.params;
 
     try{
-
-        const findProfile =await Profile.findOne({userId:id})
+        
+        const getUser  = await User.findOne({username})
+        if(!getUser){
+            next(handelError(404, "Profile Not found"))
+        }
+        const findProfile =await Profile.findOne({userId:getUser._id})
         if(!findProfile){
             next(handelError(404, "Profile Not found"))
         }
         else{
-            const {following,bookmarks} = findProfile; 
-            res.status(200).json({following,bookmarks})
+
+            res.status(200).json(findProfile)
         }
 
 

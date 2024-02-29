@@ -25,7 +25,7 @@ const dispatch = useDispatch()
         <Navbar.Brand as={'a'} href='/'>
             <img className='md:w-36 w-20' src='/logo.png' />
         </Navbar.Brand>
-        <TextInput  icon={RiSearchLine} placeholder='Search '  className='hidden lg:flex' />
+        <TextInput   icon={RiSearchLine} placeholder='Search '  className='hidden lg:flex'  />
         <Button color='gray' pill className='flex lg:hidden w-10 h-10'>
           <RiSearchLine  />
         </Button>

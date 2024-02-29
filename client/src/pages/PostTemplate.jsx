@@ -46,7 +46,7 @@ const PostTemplate = () => {
     if(currentUser){
 
     try{
-      const res = await fetch(`/api/profile/myprofile`)
+      const res = await fetch(`/api/profile/myprofile/${currentUser.username}`)
       const data = await res.json();
 
       if(!res.ok){
