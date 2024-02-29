@@ -5,6 +5,7 @@ import { create,getProfile,getMyProfile,addbookmark } from '../controllers/profi
 import { verifyToken } from '../utils/verifyToken.js'
 import { handelError } from '../utils/handelError.js'
 
+import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 

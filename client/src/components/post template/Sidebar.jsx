@@ -3,7 +3,7 @@ import { RiCloseLine } from "react-icons/ri";
 import { Button } from "flowbite-react";
 import Comment from "./Comment";
 import { Link } from "react-router-dom";
-const Sidebar = ({ currentUser,commentBar, setCommentBar,postId,comments, setComments }) => {
+const Sidebar = ({ currentUser,commentBar, setCommentBar,postId,comments, setComments,authorId }) => {
     const [content,setContent] = useState('')
     const [error,setError] = useState()
 
@@ -73,7 +73,7 @@ const Sidebar = ({ currentUser,commentBar, setCommentBar,postId,comments, setCom
 
       {/* //commetns loop */}
   <div className="flex gap-8  flex-col">
-    {comments.length > 0  ? comments.map(comment => <Comment comments={comments} setComments={setComments} key={comment._id} comment={comment}  currentUser={currentUser} /> ) : <p>No Comments</p>}
+    {comments.length > 0  ? comments.map(comment => <Comment authorId={authorId} comments={comments} setComments={setComments} key={comment._id} comment={comment}  currentUser={currentUser} /> ) : <p>No Comments</p>}
 
       
   </div>

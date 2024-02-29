@@ -81,3 +81,25 @@ export const likeComments = async (req,res,next) =>{
   
   
   }
+
+  export const deleteComments = async (req,res,next) =>{
+    const {commentId} = req.params
+
+    try{
+      const findComent = await Comment.findById(commentId);
+
+      if(findComent.userId === req.user.id){
+        await Comment.findByIdAndDelete(commentId)
+        res.status(200).json({message:'Comment Deleted'})
+      }
+      else{
+        next(handelError(401, 'UnAuthorized'))
+      }
+
+      
+    }
+    catch(e)
+{
+  next(e)
+}    
+  }

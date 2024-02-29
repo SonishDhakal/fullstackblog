@@ -171,7 +171,7 @@ setError(e.message)
 
   return loading ? <Spinner /> : (
     error ? <p>{error}</p> : <div className='relative'>
-      <Sidebar comments={comments} setComments={setComments} postId={post.postId} commentBar={commentBar} setCommentBar={setCommentBar} currentUser={currentUser} />
+      <Sidebar authorId={post.userId} comments={comments} setComments={setComments} postId={post.postId} commentBar={commentBar} setCommentBar={setCommentBar} currentUser={currentUser} />
       {commentBar && <div className='fixed top-0 left-0 h-full w-screen bg-black/[0.05] dark:bg-black/[0.2] z-40'>
 
 </div>}
