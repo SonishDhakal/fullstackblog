@@ -15,7 +15,7 @@ const PostTemplate = () => {
   const [writer,setWriter] = useState({}) 
   const [profile,setProfile] = useState({})
   const [commentBar,setCommentBar] = useState(false)
-  const [comments,setComments] = useState();
+  const [comments,setComments] = useState([]);
 
   async function fetchComment(postId){
     try{
@@ -171,8 +171,8 @@ setError(e.message)
 
   return loading ? <Spinner /> : (
     error ? <p>{error}</p> : <div className='relative'>
-      <Sidebar postId={post.postId} commentBar={commentBar} setCommentBar={setCommentBar} currentUser={currentUser} />
-      {commentBar && <div className='fixed top-0 left-0 h-full w-screen bg-black/[0.05] z-40'>
+      <Sidebar comments={comments} setComments={setComments} postId={post.postId} commentBar={commentBar} setCommentBar={setCommentBar} currentUser={currentUser} />
+      {commentBar && <div className='fixed top-0 left-0 h-full w-screen bg-black/[0.05] dark:bg-black/[0.2] z-40'>
 
 </div>}
 
@@ -199,7 +199,7 @@ setError(e.message)
         <div className="tab border-b border-t dark:border-gray-800  py-3 flex justify-between items-center">
           <div className='flex items-center gap-2'>
             <span className='flex items-center gap-1'><RiHeart2Line  onClick={handelLikes} className={`cursor-pointer text-lg ${(post?.likes?.includes(currentUser?._id)) && 'text-red-500' }`}/> {post?.likes?.length}</span>
-            <span className='flex items-center gap-1'><RiChat1Line onClick={() => setCommentBar(true)} className='text-lg'/>20</span>
+            <span className='flex items-center gap-1'><RiChat1Line onClick={() => setCommentBar(true)} className='text-lg'/>{comments && comments.length}</span>
           </div>
           <div className='flex items-center gap-2'>
          <span className='flex gap-1 items-center'>   <RiBookmark2Line onClick={handelBookmarks} className={`cursor-pointer text-lg ${(profile?.bookmarks?.includes(post?.postId)) && 'text-blue-500' }`}/>{profile?.bookmarks?.length}</span>
