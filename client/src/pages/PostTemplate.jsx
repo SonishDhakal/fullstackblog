@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import {  RiBookmark2Line, RiChat1Line, RiHeart2Line, RiShareForward2Line  } from 'react-icons/ri'
+import {  RiBookmark2Line, RiChat1Line, RiCopyleftLine, RiHeart2Line, RiLink, RiShareForward2Line  } from 'react-icons/ri'
 import {useParams} from 'react-router-dom'
 import {Spinner} from 'flowbite-react'
 import moment from 'moment'
+
 import {useSelector} from 'react-redux'
+import Sidebar from '../components/post template/Sidebar'
 const PostTemplate = () => {
   const {slug} = useParams()
   const [loading,setLoading] = useState(false);
@@ -12,9 +14,37 @@ const PostTemplate = () => {
   const {currentUser} = useSelector(state => state.user)
   const [writer,setWriter] = useState({}) 
   const [profile,setProfile] = useState({})
+  const [commentBar,setCommentBar] = useState(false)
+  const [comments,setComments] = useState();
+
+  async function fetchComment(postId){
+    try{
+      const res = await fetch(`/api/comment/getcomments/${postId}`);
+      const data = await res.json();
+
+      if(res.status===204){
+       return setComments(null)
+      }
+
+      if(!res.ok){
+        return setError(data.message)
+      }
+
+      return setComments(data)
+
+      
+
+
+    }
+    catch(e){
+      setError(e.message)
+    }
+    
+  }
 
   async function fetchProfile(){
-    setLoading(true)
+    if(currentUser){
+
     try{
       const res = await fetch(`/api/profile/myprofile`)
       const data = await res.json();
@@ -24,15 +54,18 @@ const PostTemplate = () => {
       return  setError(data.message)
       }
       setProfile(data)
-      setLoading(false)
+
 
 
     }
     catch(e){
       setError(e.message)
-      setLoading(false)
+
 
     }
+    }
+    return
+    
 
   }
 
@@ -90,6 +123,9 @@ setError(e.message)
       const data = await res.json();
       setPost(data[0])
      await fetchUser(data[0].userId)
+  await fetchProfile()
+  await fetchComment(data[0].postId)
+
       setLoading(false)
 
 
@@ -130,12 +166,17 @@ setError(e.message)
 
   useEffect(() =>{
     fetchPost()
-    fetchProfile()
 
   },[slug])
 
   return loading ? <Spinner /> : (
-    error ? <p>{error}</p> : <div className="container  mx-auto px-8 md:px-0 max-w-3xl my-8">
+    error ? <p>{error}</p> : <div className='relative'>
+      <Sidebar postId={post.postId} commentBar={commentBar} setCommentBar={setCommentBar} currentUser={currentUser} />
+      {commentBar && <div className='fixed top-0 left-0 h-full w-screen bg-black/[0.05] z-40'>
+
+</div>}
+
+<div className="container  mx-auto px-8 md:px-0 max-w-3xl py-8">
     <div>
       {/* //full contaien */}
       <div className='flex flex-col gap-8'>
@@ -158,11 +199,11 @@ setError(e.message)
         <div className="tab border-b border-t dark:border-gray-800  py-3 flex justify-between items-center">
           <div className='flex items-center gap-2'>
             <span className='flex items-center gap-1'><RiHeart2Line  onClick={handelLikes} className={`cursor-pointer text-lg ${(post?.likes?.includes(currentUser?._id)) && 'text-red-500' }`}/> {post?.likes?.length}</span>
-            <span className='flex items-center gap-1'><RiChat1Line className='text-lg'/>20</span>
+            <span className='flex items-center gap-1'><RiChat1Line onClick={() => setCommentBar(true)} className='text-lg'/>20</span>
           </div>
           <div className='flex items-center gap-2'>
          <span className='flex gap-1 items-center'>   <RiBookmark2Line onClick={handelBookmarks} className={`cursor-pointer text-lg ${(profile?.bookmarks?.includes(post?.postId)) && 'text-blue-500' }`}/>{profile?.bookmarks?.length}</span>
-<RiShareForward2Line className='cursor-pointer text-lg'/>
+
           </div>
     
         </div>
@@ -184,6 +225,7 @@ setError(e.message)
     
     
     
+    </div>
     </div>
     </div>
     

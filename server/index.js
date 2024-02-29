@@ -6,6 +6,7 @@ import authRoute from './routes/auth.route.js'
 import verifyRoute from './routes/verify.route.js'
 import profileRoute from './routes/profile.route.js'
 import postRoute from './routes/post.route.js'
+import commentRoute  from './routes/commet.route.js'
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use('/api/auth', authRoute)
 app.use('/api/verificationcode', verifyRoute)
 app.use('/api/profile', profileRoute)
 app.use('/api/post', postRoute)
+app.use('/api/comment', commentRoute)
 
 
 
