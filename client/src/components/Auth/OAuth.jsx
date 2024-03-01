@@ -48,7 +48,7 @@ const OAuth = () => {
       }
 
       dispatch(signUpSuccess(data));
-      navigate(`/author/${data.username}?tab=profile`);
+      navigate(`/${data.username}`);
     } catch (e) {
       dispatch(signUpFailure(e.message));
     }

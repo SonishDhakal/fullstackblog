@@ -235,10 +235,12 @@ setLoading(false)
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           >
             <option value={"uncategorized"}>Uncategorized</option>
-            <option value={"nextjs"}>Next js</option>
-            <option value={"js"}>Js</option>
-            <option value={"reacjs"}>React js</option>
-            <option value={"vuejs"}>Vue js</option>
+            <option value={"travel"}>Travel</option>
+            <option value={"guide"}>Guide</option>
+            <option value={"locations"}>Locations</option>
+            <option value={"tricks"}>Tricks</option>
+            <option value={"package"}>Package</option>
+            <option value={"top-10"}>Top-10</option>
           </Select>
         </div>
         <div className="flex flex-col gap-3">

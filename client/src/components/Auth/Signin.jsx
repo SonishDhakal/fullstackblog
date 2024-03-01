@@ -143,7 +143,7 @@ const Signin = ({ setCurrentState }) => {
 
 
         dispatch(signUpSuccess(data))
-        return navigate(`/author/${data.username}/profile=tab`)
+        return navigate(`/${data.username}`)
 
 
 

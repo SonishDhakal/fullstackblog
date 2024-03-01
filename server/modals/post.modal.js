@@ -43,7 +43,8 @@ const postScheam = new mongoose.Schema({
 
     },
     featuredImage:{
-        type:String
+        type:String,
+        default:'https://firebasestorage.googleapis.com/v0/b/fullstackblogapp.appspot.com/o/default.jpg?alt=media&token=872aaa22-28c9-4252-804e-9dfc7736e377'
     },
     username:{
         type:String

@@ -91,7 +91,7 @@ dispatch(signUpFailure(error.message))
         return dispatch(signUpFailure(data.message))
       }
       dispatch(signUpSuccess(data))
-      navigate(`/author/${currentUser.username}?tab=profile`)
+      navigate(`/${currentUser.username}`)
 
       
 

@@ -125,7 +125,7 @@ export const CreateDraft = async (req, res, next) => {
 export const getPost = async (req,res,next) =>{
   try{
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 5;
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
 
     const posts = await Post.find({
@@ -144,7 +144,7 @@ export const getPost = async (req,res,next) =>{
 
 
 
-    })
+    }).sort({updatedAt:sortDirection}).skip(startIndex).limit(limit)
 
     if(posts){
       res.status(200).json(posts)

@@ -202,7 +202,7 @@ setError(e.message)
             <span className='flex items-center gap-1'><RiChat1Line onClick={() => setCommentBar(true)} className='text-lg'/>{comments && comments.length}</span>
           </div>
           <div className='flex items-center gap-2'>
-         <span className='flex gap-1 items-center'>   <RiBookmark2Line onClick={handelBookmarks} className={`cursor-pointer text-lg ${(profile?.bookmarks?.includes(post?.postId)) && 'text-blue-500' }`}/>{profile?.bookmarks?.length}</span>
+         <span className='flex gap-1 items-center'>   <RiBookmark2Line onClick={handelBookmarks} className={`cursor-pointer text-lg ${(profile?.bookmarks?.includes(post?.postId)) && 'text-blue-500' }`}/></span>
 
           </div>
     
