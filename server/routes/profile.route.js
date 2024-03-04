@@ -36,7 +36,7 @@ router.post('/create' , (req,res,next) =>{
 
 
 router.get('/get/:userId', getProfile )
-router.get('/myprofile/:username',verifyToken, getMyProfile )
+router.get('/myprofile/:username', getMyProfile )
 router.get('/addbookmark/:postId',verifyToken, addbookmark )
 
 export default router

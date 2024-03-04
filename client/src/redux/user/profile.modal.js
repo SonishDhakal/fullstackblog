@@ -49,6 +49,23 @@ const profileSchema = new mongoose.Schema({
         type:Array,
         default:[]
     },
+    featured:{
+        type:Array,
+        default:[]
+    },
+    about:{
+        type:String,
+
+    },
+    socials:{
+        type:Object
+        
+    },
+    gender:{
+        type:String
+    }
+   
+
 
     
 },{timestamps:true})

@@ -32,11 +32,11 @@ const dispatch = useDispatch()
         </div>
       
         <div className='flex gap-3 items-center'>
-        <Link to={'/write'} className=' gap-2 items-center justify-between  rounded-full px-3 py-1 hidden sm:flex'>
+        {currentUser && <Link to={'/write'} className=' gap-2 items-center justify-between  rounded-full px-3 py-1 hidden sm:flex'>
       
- Write <RiPencilLine />
-
-          </Link>
+      Write <RiPencilLine />
+     
+               </Link>}
    
           {theme === 'light'?      <Button  onClick={() => dispatch(changeTheme())} className='w-10 h-10' pill color='gray'> <RiMoonLine /> </Button> :     <Button  onClick={() => dispatch(changeTheme())} className='w-10 h-10' pill color='gray'><RiSunLine  /> </Button>}
 

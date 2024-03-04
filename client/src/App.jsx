@@ -8,11 +8,13 @@ import OnBoarding from './pages/OnBoarding'
 import Author from './pages/Author'
 import Write from './pages/Write'
 import PostTemplate from './pages/PostTemplate'
+import Dashboard from './pages/Dashboard'
 
 const App = () => {
   return (
     <BrowserRouter>
 
+      <div>
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -21,9 +23,11 @@ const App = () => {
         <Route path='/:authorId' element={<Author />} />
         <Route path='/write' element={<Write />} />
         <Route path='/:username/:slug' element={<PostTemplate />}  />
+        <Route path='/dashboard' element={<Dashboard />}  />
 
 
       </Routes>
+      </div>
 
 
     </BrowserRouter>

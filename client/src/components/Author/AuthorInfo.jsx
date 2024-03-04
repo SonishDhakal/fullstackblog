@@ -1,28 +1,33 @@
+import moment from 'moment';
 import React from 'react'
 import { useState } from 'react';
-export const AuthorInfo = ({profile,authorId,posts}) => {
-  console.log(posts)
-  const [currentState, setCurrentState] = useState("Home");
-  const menu = ["Home", "About", "Featured", "Bookmarks"];
+import { RiEdit2Line } from 'react-icons/ri';
+import {useSelector} from 'react-redux'
+import {Button} from 'flowbite-react'
 
-  function changeState(e) {
-    setCurrentState(e.target.id);
-  }
+export const AuthorInfo = ({profile,authorId,posts,changeState,currentState,setCurrentState,settings,setSettings}) => {
+  console.log(posts)
+  const menu = ["Home", "About", "Featured", "Bookmarks"];
+  const {currentUser} = useSelector(state => state.user)
+
+ 
   return (
     <div className="flex flex-col gap-4 ">
-    <div className="flex  gap-6 ">
-      <div className="flex gap-3 flex-col">
+    <div className="flex  justify-between ">
+   <div className='flex gap-4'>
+   <div className="flex gap-3 flex-col">
         <img
           className="w-40 h-40 rounded-lg"
           src={profile?.profilePicture}
         />
           <div className="text-gray-500 flex gap-2">
-          <span>{posts?.length} Posts</span>
+
+          <span>Joined {moment(profile?.createdAt).format('MMMM YYYY')}</span>
 
         </div>
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 ">
         <h2 className="text-2xl md:text-4xl font-semibold">
           {profile?.firstName} {profile?.lastName}
         </h2>
@@ -31,9 +36,14 @@ export const AuthorInfo = ({profile,authorId,posts}) => {
           <span>{profile?.followers?.length} followers</span>
           <span>{profile?.followers?.length} following</span>
         </div>
+        <span className='text-gray-500'>{posts?.length} Posts</span>
         <p>{profile?.bio}</p>
       
       </div>
+   </div>
+   {currentUser?._id ===profile?.userId && <div className='flex flex-col justify-end'>
+   <button onClick={() => setSettings(true)} className='border rounded-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700  transition-all'  ><span className='flex gap-3 items-center'><RiEdit2Line /> Edit Profile</span></button>
+   </div>}
     </div>
     <div>
       <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-4">

@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { AuthorInfo } from "../components/Author/AuthorInfo";
 import AuthorHome from "../components/Author/AuthorHome";
 import {Button} from 'flowbite-react'
+import AuthorAbout from "../components/Author/AuthorAbout";
+import Bookmarks from "../components/Author/Bookmarks";
+import AuthorSettings from "../components/Author/AuthorSettings";
 
 const Author = () => {
   const { authorId } = useParams();
@@ -12,6 +15,11 @@ const Author = () => {
   const [errorpage, setErrorPage] = useState();
   const [posts,setPosts] = useState();
   const [showMore,setShowMore] = useState(false);
+  const [currentState, setCurrentState] = useState("Home");
+  const [settings,setSettings] = useState(false)
+  function changeState(e) {
+    setCurrentState(e.target.id);
+  }
 
   async function fetchPost(userId){
     setLoading(true);
@@ -103,18 +111,23 @@ const Author = () => {
     <p>ERor 404</p>
   ) : (
     !loading && (
-      <div className="max-w-4xl mx-auto px-8 md:px-0">
+      <div className="">
+        <div className="max-w-4xl mx-auto px-8 md:px-0">
         <div className="w-full my-4">
           {/* //nav section */}
-        <AuthorInfo authorId={authorId} profile={profile} posts={posts} />
+        <AuthorInfo setSettings={setSettings} settings={settings}  currentState={currentState} changeState={changeState} setCurrentState={setCurrentState} authorId={authorId} profile={profile} posts={posts} />
           <div className="content py-2">
-            <AuthorHome posts={posts}  username={authorId} userId={profile?.userId}/>
-
-{showMore && <div className='flex justify-center mt-5'>
+      
+{currentState ==='Home' ?   <><AuthorHome posts={posts}  username={authorId} userId={profile?.userId}/> {showMore && <div className='flex justify-center mt-5'>
   <Button onClick={handelShoreMore} color='blue'>Show More</Button>
-</div>}
+</div>} </> : currentState==='About' ?
+<AuthorAbout /> : <Bookmarks />}
+
           </div>
         </div>
+        
+      </div>
+      <AuthorSettings profile={profile} setSettings={setSettings} settings={settings} />
       </div>
     )
   );

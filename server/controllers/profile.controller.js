@@ -79,15 +79,22 @@ const {username} = req.params;
         
         const getUser  = await User.findOne({username})
         if(!getUser){
-            next(handelError(404, "Profile Not found"))
+          return  next(handelError(404, "Profile Not found"))
         }
         const findProfile =await Profile.findOne({userId:getUser._id})
         if(!findProfile){
-            next(handelError(404, "Profile Not found"))
+           return next(handelError(404, "Profile Not found"))
         }
         else{
+            if(findProfile.userId ===req?.user?.id){
+              return  res.status(200).json(findProfile)
+            }
+            else{
+                const {bookmarks,...rest} = findProfile._doc
+              return res.status(200).json(rest)
+            }
 
-            res.status(200).json(findProfile)
+            
         }
 
 
