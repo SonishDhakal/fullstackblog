@@ -4,7 +4,7 @@ import { TextInput, Button,Spinner, Alert } from "flowbite-react";
 
 
 
-const ChangePassword = () => {
+const ChangePassword = ({setCurrentState}) => {
   const [form, setForm] = useState({});
   const [loading,setLoading] = useState(false);
   const [error,setError] = useState(null)
@@ -64,7 +64,11 @@ return setError('New Password must contain at least 8 characters, 1 lowercase le
            placeholder='Current Password' />
     <TextInput type="password" onChange={(e) => setForm({ ...form, newPassword: e.target.value })} placeholder='New Password' />
   </div>
+  <div className="flex justify-between items-center">
+    <span onClick={() => setCurrentState('forgot')} className="hover:underline cursor-pointer">Forgot Password?</span>
   <Button disabled={(!form.currentPassword || !form.newPassword || loading)} onClick={updatePassword} gradientDuoTone={'purpleToPink'} className='self-end'>{loading ? <Spinner />: 'Change Password'}</Button>
+
+  </div>
   {error && <Alert color={'failure'}>{error}</Alert>}
   {success && <Alert color={'success'}>Passoword Changed Successfully</Alert>}
 </div>

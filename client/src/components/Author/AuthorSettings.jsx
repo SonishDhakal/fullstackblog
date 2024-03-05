@@ -12,6 +12,7 @@ import AboutSettings from "../settings/AboutSettings";
 import ChangeEmail from "../settings/ChangeEmail";
 import ChangePassword from "../settings/ChangePassword";
 import ChangeUsername from "../settings/ChangeUsername";
+import ForgotPassword from "../settings/ForgotPassword";
 const sidebars = [
   {
     name: "Profile",
@@ -79,10 +80,10 @@ const AuthorSettings = ({ settings, setSettings, profile }) => {
               ) : currentState === "email" ? (
                 <ChangeEmail />
               ) : currentState === "password" ? (
-                <ChangePassword />
-              ) : (
+                <ChangePassword setCurrentState={setCurrentState}/>
+              ) : currentState==='username' ? (
                 <ChangeUsername  />
-              )}
+              ): <ForgotPassword  />}
             </div>
           </div>
         </div>
