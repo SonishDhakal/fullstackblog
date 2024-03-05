@@ -55,10 +55,12 @@ const profileSchema = new mongoose.Schema({
     },
     about:{
         type:String,
+        default:''
 
     },
     socials:{
-        type:Object
+        type:Object,
+        default:{}
         
     },
     gender:{

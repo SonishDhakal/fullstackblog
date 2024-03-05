@@ -144,3 +144,39 @@ export const addbookmark = async (req,res,next) =>{
       }
     
 }
+
+
+
+export const getMyAbout = async (req,res,next) =>{
+    const {username} = req.params;
+
+    try{
+        const findProfile = await Profile.findOne({userId:username});
+        if(!findProfile){
+            return next(handelError(404, "Profile Not found"))
+        }
+
+        const {socials,about} = findProfile._doc 
+        res.status(200).json({socials,about})
+
+
+
+    }
+    catch(e){
+        next(e)
+    }
+}
+
+
+export const updateAbout = async (req,res,next) =>{
+    const {about,socials} = req.body;
+
+    try{
+        const updateProfile = await Profile.findOneAndUpdate({userId:req.user.id},{about,socials},{new:true});
+        res.status(200).json('done')
+
+    }
+    catch(e){
+        next(e)
+    }
+}
