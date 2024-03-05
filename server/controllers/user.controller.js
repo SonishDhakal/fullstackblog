@@ -92,3 +92,36 @@ export const forgotPassword = async (req,res,next) =>{
         next(e)
     }
 }
+
+export const forgotEmail = async (req,res,next) =>{
+    try{
+        if(!req.body.email){
+            return next(handelError(401, "UnAuthorized"))
+        }
+        const searchEmail = await User.findOne({email:req.body.email})
+        if(searchEmail){
+            return next(handelError(402, "Email already in Use"))
+        }
+
+        await User.findByIdAndUpdate(req.user.id,{email:req.body.email});
+        res.status(200).json('Done')
+
+    }
+    catch(e){
+        next(e)
+    }
+
+
+}
+
+
+export const checkEmail = async (req,res,next) =>{
+    const searchEmail = await User.findOne({email:req.body.email})
+    if(searchEmail){
+        return next(handelError(402, "Email already in Use"))
+    }
+    else{
+        return res.status(200).json('nice')
+    }
+
+}
