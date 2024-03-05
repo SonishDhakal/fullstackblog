@@ -34,7 +34,16 @@ const AuthorSettings = ({ settings, setSettings, profile }) => {
       <div className="fixed top-0 left-0 h-screen w-screen bg-black/[0.3] ">
         <div className="fixed w-[700px]   top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg dark:bg-[rgb(16,23,42)] ">
           <div className="border-b dark:border-b-gray-500 flex justify-between py-5 px-5 items-center">
-          {(currentState ==='Profile' || currentState==='Security' || currentState==='About') ? <h2 className="font-bold text-xl ">User Settings</h2> : <RiArrowLeftLine className="cursor-pointer text-xl" onClick={() => setCurrentState('Security')} /> }  
+            {currentState === "Profile" ||
+            currentState === "Security" ||
+            currentState === "About" ? (
+              <h2 className="font-bold text-xl ">User Settings</h2>
+            ) : (
+              <RiArrowLeftLine
+                className="cursor-pointer text-xl"
+                onClick={() => setCurrentState("Security")}
+              />
+            )}
             <RiCloseLine
               onClick={() => setSettings(false)}
               className="text-2xl cursor-pointer"
@@ -63,9 +72,17 @@ const AuthorSettings = ({ settings, setSettings, profile }) => {
             <div className="flex-1 p-4 h-[400px] overflow-y-scroll">
               {currentState === "Profile" ? (
                 <ProfileSettings profile={profile} />
-              ) : currentState==='Security' ? (
+              ) : currentState === "Security" ? (
                 <SecurityProfile setCurrentState={setCurrentState} />
-              ): currentState==='About' ? (<AboutSettings />) : currentState==='email' ? <ChangeEmail /> : currentState==='password' ? <ChangePassword /> : <ChangeUsername />}
+              ) : currentState === "About" ? (
+                <AboutSettings />
+              ) : currentState === "email" ? (
+                <ChangeEmail />
+              ) : currentState === "password" ? (
+                <ChangePassword />
+              ) : (
+                <ChangeUsername  />
+              )}
             </div>
           </div>
         </div>
