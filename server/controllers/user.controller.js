@@ -48,3 +48,34 @@ export const updateUsername = async (req,res,next) =>{
     }
 
 }
+
+
+export const updatePassword = async (req,res,next) =>{
+    const {newPassword, currentPassword} = req.body;
+
+    if(!newPassword || !currentPassword){
+        return next(handelError(401, 'Unauthorized'))
+    }
+
+    try{
+        const getUser = await User.findById(req.user.id);
+
+        const checkpassword = bcryptjs.compareSync(currentPassword,getUser.password);
+
+        if(!checkpassword){
+            return next(handelError(401, "Incorrect password"))
+
+        }
+
+        const hashedPassword = bcryptjs.hashSync(newPassword, 10);
+
+
+        await User.findByIdAndUpdate(req.user.id, {password:hashedPassword})
+
+        res.status(200).json('Done')
+   
+    }
+    catch(e){
+        next(e)
+    }
+}
