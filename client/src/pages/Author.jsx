@@ -121,7 +121,7 @@ const Author = () => {
 {currentState ==='Home' ?   <><AuthorHome posts={posts}  username={authorId} userId={profile?.userId}/> {showMore && <div className='flex justify-center mt-5'>
   <Button onClick={handelShoreMore} color='blue'>Show More</Button>
 </div>} </> : currentState==='About' ?
-<AuthorAbout /> : <Bookmarks />}
+<AuthorAbout profile={profile}/> : <Bookmarks />}
 
           </div>
         </div>
