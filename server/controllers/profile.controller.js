@@ -86,6 +86,7 @@ const {username} = req.params;
            return next(handelError(404, "Profile Not found"))
         }
         else{
+
             if(findProfile.userId ===req?.user?.id){
               return  res.status(200).json(findProfile)
             }
@@ -192,5 +193,18 @@ export const updateProfile = async (req,res,next) =>{
     }
     catch(e){
         next(e)
+    }
+}
+
+export const  getMybookmakrs = async (req,res,next) =>{
+    try{
+        const findPost = await Profile.findOne({userId:req.user.id})
+
+
+        res.status(200).json(findPost)
+
+    }
+    catch(e){
+
     }
 }

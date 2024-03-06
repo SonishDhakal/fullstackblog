@@ -1,7 +1,7 @@
 
 
 import express from 'express'
-import { create,getProfile,getMyProfile,addbookmark,getMyAbout,updateAbout,updateProfile } from '../controllers/profile.controller.js'
+import { create,getProfile,getMyProfile,addbookmark,getMyAbout,updateAbout,updateProfile, getMybookmakrs } from '../controllers/profile.controller.js'
 import { verifyToken } from '../utils/verifyToken.js'
 import { handelError } from '../utils/handelError.js'
 
@@ -36,7 +36,9 @@ router.post('/create' , (req,res,next) =>{
 
 
 router.get('/get/:userId', getProfile )
-router.get('/myprofile/:username', getMyProfile )
+router.get('/myprofile/:username',  getMyProfile )
+router.get('/mybookmarks',verifyToken,  getMybookmakrs )
+
 router.get('/about/:username', getMyAbout )
 router.get('/addbookmark/:postId',verifyToken, addbookmark )
 router.post('/updateAbout/',verifyToken, updateAbout )

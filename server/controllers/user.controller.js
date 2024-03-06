@@ -125,3 +125,16 @@ export const checkEmail = async (req,res,next) =>{
     }
 
 }
+
+
+export const getUsername = async (req,res,next) =>{
+    try{
+        const user = await User.findById(req.params.userId)
+        const {username} = user._doc
+        res.status(200).json({username})
+
+    }
+    catch(e){
+        next(e)
+    }
+}

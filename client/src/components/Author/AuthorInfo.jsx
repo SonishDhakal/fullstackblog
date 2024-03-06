@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux'
 import {Button} from 'flowbite-react'
 
 export const AuthorInfo = ({profile,authorId,posts,changeState,currentState,setCurrentState,settings,setSettings}) => {
-  console.log(posts)
+
   const menu = ["Home", "About", "Featured", "Bookmarks"];
   const {currentUser} = useSelector(state => state.user)
 

@@ -13,7 +13,7 @@ const AuthorHome = ({ userId, username, posts }) => {
       {posts?.map((post) => (
         <div
           onClick={() => navigate(`/${username}/${post?.slug}`)}
-          key={post.id}
+          key={post._id}
           className="shadow-[0_3px_10px_rgb(0,0,0,0.2)]  flex md:flex-row  flex-col gap-4 rounded-md px-3 py-4 overflow-hidden cursor-pointer"
         >
 

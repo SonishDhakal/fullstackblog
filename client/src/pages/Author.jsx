@@ -106,6 +106,7 @@ const Author = () => {
   useEffect(() => {
     fetchUser();
 
+
   }, [authorId]);
   return errorpage ? (
     <p>ERor 404</p>
@@ -121,7 +122,7 @@ const Author = () => {
 {currentState ==='Home' ?   <><AuthorHome posts={posts}  username={authorId} userId={profile?.userId}/> {showMore && <div className='flex justify-center mt-5'>
   <Button onClick={handelShoreMore} color='blue'>Show More</Button>
 </div>} </> : currentState==='About' ?
-<AuthorAbout profile={profile}/> : <Bookmarks />}
+<AuthorAbout profile={profile}/> : <Bookmarks bookmarks={profile?.bookmarks}/>}
 
           </div>
         </div>

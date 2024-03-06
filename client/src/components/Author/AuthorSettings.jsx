@@ -29,7 +29,7 @@ const sidebars = [
 ];
 const AuthorSettings = ({ settings, setSettings, profile,setProfile }) => {
   const [currentState, setCurrentState] = useState("Profile");
-  console.log(currentState);
+
   return (
     settings && (
       <div className="fixed top-0 left-0 h-screen w-screen bg-black/[0.3] ">

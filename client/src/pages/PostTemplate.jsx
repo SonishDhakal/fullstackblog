@@ -53,7 +53,16 @@ const PostTemplate = () => {
         setLoading(false)
       return  setError(data.message)
       }
-      setProfile(data)
+      if(currentUser){
+        const neww = await fetch(`/api/profile/mybookmarks`)
+        const dataa = await neww.json();
+        setProfile({...data,bookmarks:dataa.bookmarks})
+
+      }
+      else{
+        setProfile(data)
+
+      }
 
 
 
