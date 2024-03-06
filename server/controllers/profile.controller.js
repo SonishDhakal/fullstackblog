@@ -180,3 +180,17 @@ export const updateAbout = async (req,res,next) =>{
         next(e)
     }
 }
+
+
+export const updateProfile = async (req,res,next) =>{
+    const {firstName,lastName,gender,bio,profilePicture} = req.body;
+    try{
+        const findProfile = await Profile.findOneAndUpdate({userId:req.user.id}, {firstName,lastName,gender,bio,profilePicture}, {new:true});
+
+        res.status(200).json('done')
+
+    }
+    catch(e){
+        next(e)
+    }
+}

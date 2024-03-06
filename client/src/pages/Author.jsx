@@ -127,7 +127,7 @@ const Author = () => {
         </div>
         
       </div>
-      <AuthorSettings profile={profile} setSettings={setSettings} settings={settings} />
+      <AuthorSettings setProfile={setProfile} profile={profile} setSettings={setSettings} settings={settings} />
       </div>
     )
   );

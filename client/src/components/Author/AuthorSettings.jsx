@@ -27,7 +27,7 @@ const sidebars = [
     icon: <RiEdit2Line />,
   },
 ];
-const AuthorSettings = ({ settings, setSettings, profile }) => {
+const AuthorSettings = ({ settings, setSettings, profile,setProfile }) => {
   const [currentState, setCurrentState] = useState("Profile");
   console.log(currentState);
   return (
@@ -72,7 +72,7 @@ const AuthorSettings = ({ settings, setSettings, profile }) => {
             </ul>
             <div className="flex-1 p-4 h-[400px] overflow-y-scroll">
               {currentState === "Profile" ? (
-                <ProfileSettings profile={profile} />
+                <ProfileSettings profile={profile} setProfile={setProfile} />
               ) : currentState === "Security" ? (
                 <SecurityProfile setCurrentState={setCurrentState} />
               ) : currentState === "About" ? (
