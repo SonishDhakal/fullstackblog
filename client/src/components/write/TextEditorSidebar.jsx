@@ -245,7 +245,7 @@ setLoading(false)
         </div>
         <div className="flex flex-col gap-3">
           <Label htmlFor="tags">Tags</Label>
-          <TextInput name="tags" id="tags" onChange={handelTags} />
+          <TextInput value={form?.tags} name="tags" id="tags" onChange={handelTags} />
           <span>Seperate by commas if multiple tags</span>
         </div>
       </div>
