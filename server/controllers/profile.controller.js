@@ -210,3 +210,68 @@ export const  getMybookmakrs = async (req,res,next) =>{
 
     }
 }
+
+
+export const follow = async (req,res,next) =>{
+    const {authorId} = req.params;
+    const userId = req.user.id;
+
+    try{
+
+
+        const userProfile = await Profile.findOne({userId})
+        const authorProfile = await Profile.findOne({userId:authorId})
+
+
+        if(!userProfile){
+            next(handelError(404, 'Profile Not found'))
+        }
+
+        const {following:userFollowing} = userProfile._doc;
+        const {followers:authorFollowers} = authorProfile._doc;
+
+
+        ///check if follow or unfollow //
+
+        const exists = userFollowing.includes(authorId);
+
+        if(exists){
+            // unfollow
+
+            const newUserFollowing = userFollowing.filter(item => item!==authorId)
+
+            //remove from the followers of author as well
+            const newAuthorFollowers = authorFollowers.filter(item => item!==userId)
+
+            //save both
+         const userProfiles=  await Profile.findOneAndUpdate({userId},{following:newUserFollowing},{new:true})
+            const authorProfiles = await Profile.findOneAndUpdate({userId:authorId},{followers:newAuthorFollowers},{new:true})
+
+            res.status(200).json({authorProfiles,userProfiles})
+
+
+
+
+        }
+        else{
+            
+            userFollowing.push(authorId)
+            authorFollowers.push(userId)
+
+            const userProfiles= await Profile.findOneAndUpdate({userId},{following:userFollowing},{new:true})
+            const authorProfiles=  await Profile.findOneAndUpdate({userId:authorId},{followers:authorFollowers},{new:true})
+
+            res.status(200).json({authorProfiles,userProfiles})
+
+
+
+
+            //follow
+        }
+        
+
+    }
+    catch(e){
+        next(e)
+    }
+}

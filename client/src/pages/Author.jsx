@@ -116,7 +116,7 @@ const Author = () => {
  {error &&    <Alert color={'failure'}>{error}</Alert>}
   <div className="w-full my-4">
     {/* //nav section */}
-  <AuthorInfo setSettings={setSettings} settings={settings}  currentState={currentState} changeState={changeState} setCurrentState={setCurrentState} authorId={authorId} profile={profile} posts={posts} />
+  <AuthorInfo setProfile={setProfile} setSettings={setSettings} settings={settings}  currentState={currentState} changeState={changeState} setCurrentState={setCurrentState} authorId={authorId} profile={profile} posts={posts} />
     <div className="content py-2 ">
 
 {currentState ==='Home' ?   <><AuthorHome posts={posts}  username={authorId} userId={profile?.userId}/> {showMore && <div className='flex justify-center mt-5'>

@@ -1,7 +1,7 @@
 
 
 import express from 'express'
-import { create,getProfile,getMyProfile,addbookmark,getMyAbout,updateAbout,updateProfile, getMybookmakrs } from '../controllers/profile.controller.js'
+import { create,getProfile,getMyProfile,addbookmark,getMyAbout,updateAbout,updateProfile, getMybookmakrs,follow } from '../controllers/profile.controller.js'
 import { verifyToken } from '../utils/verifyToken.js'
 import { handelError } from '../utils/handelError.js'
 
@@ -43,5 +43,6 @@ router.get('/about/:username', getMyAbout )
 router.get('/addbookmark/:postId',verifyToken, addbookmark )
 router.post('/updateAbout/',verifyToken, updateAbout )
 router.post('/update/',verifyToken, updateProfile )
+router.get('/follow/:authorId',verifyToken, follow )
 
 export default router

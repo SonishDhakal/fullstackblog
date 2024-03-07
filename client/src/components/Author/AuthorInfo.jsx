@@ -1,11 +1,13 @@
 import moment from "moment";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { RiEdit2Line } from "react-icons/ri";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Button } from "flowbite-react";
 
 export const AuthorInfo = ({
+  setProfile,
   profile,
   authorId,
   posts,
@@ -17,6 +19,59 @@ export const AuthorInfo = ({
 }) => {
   const menu = ["Home", "About", "Bookmarks"];
   const { currentUser } = useSelector((state) => state.user);
+  const [error,setError] = useState(null)
+  const [user,setUser] = useState(null)
+
+  async function handelFollow(){
+    setError(null)
+    try {
+      const res = await fetch(`/api/profile/follow/${profile.userId}`)
+      const data = await res.json();
+
+      if(!res.ok){
+       return setError(data.message)
+      }
+
+      setProfile(data.authorProfiles)
+      setUser(data.userProfiles)
+
+
+
+      
+      
+    } catch (error) {
+      setError(error.message)
+      
+    }
+  }
+
+  async function fetchUser() {
+
+
+    if (authorId) {
+      try {
+        const res = await fetch(`/api/profile/myprofile/${currentUser.username}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+
+          return setError(data.message);
+        }
+        setUser(data);
+
+
+      } catch (e) {
+
+        setError(e.message);
+      }
+    }
+    return;
+  }
+
+  useEffect(() =>{
+    fetchUser()
+
+  },[currentUser])
 
   return (
     <div className="flex flex-col gap-4 ">
@@ -41,15 +96,14 @@ export const AuthorInfo = ({
             <p className="text-gray-400 font-semibold">@{authorId}</p>
             <div className="text-gray-500 flex gap-2">
               <span>{profile?.followers?.length} followers</span>
-              <span>{profile?.followers?.length} following</span>
+              <span>{profile?.following?.length} following</span>
             </div>
             <span className="text-gray-500">{posts?.length} Posts</span>
             <p>{profile?.bio}</p>
           </div>
         </div>
-        {currentUser?._id === profile?.userId && (
+        {currentUser && (currentUser?._id === profile?.userId ? (
           <div className="flex sm:self-end">
-            {" "}
             <button
               onClick={() => setSettings(true)}
               className="border  rounded-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700  transition-all"
@@ -59,23 +113,39 @@ export const AuthorInfo = ({
               </span>
             </button>
           </div>
-        )}
+        ) : (
+          <div className="flex sm:self-end">
+            <button disabled={!user}
+              onClick={handelFollow}
+              className="border  rounded-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700  transition-all"
+            >
+               {user?.following.includes(profile.userId) ?<span className="flex gap-3 items-center">
+                <FaMinus /> Unfollow
+              </span> :<span className="flex gap-3 items-center">
+                <FaPlus /> Follow
+              </span>}
+              
+            </button>
+          </div>
+        ))}
       </div>
       <div>
         <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-4">
           {menu.map((item, index) =>
             item === "Bookmarks" ? (
-            currentUser &&   <li
-              id={item}
-              onClick={changeState}
-              key={index}
-              className={`${
-                currentState === item &&
-                "border-b border-gray-500 dark:border-gray-300 pb-3 -mb-[1px]"
-              } cursor-pointer`}
-            >
-              {item}
-            </li>
+              currentUser && (
+                <li
+                  id={item}
+                  onClick={changeState}
+                  key={index}
+                  className={`${
+                    currentState === item &&
+                    "border-b border-gray-500 dark:border-gray-300 pb-3 -mb-[1px]"
+                  } cursor-pointer`}
+                >
+                  {item}
+                </li>
+              )
             ) : (
               <li
                 id={item}
