@@ -10,7 +10,7 @@ import {
   Textarea,
 } from "flowbite-react";
 import { storage } from "../utils/Firebase";
-import {useNavigate} from 'react-router-dom'
+import {useNavigate,Navigate} from 'react-router-dom'
 import { getDownloadURL, uploadBytesResumable, ref } from "firebase/storage";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -107,7 +107,7 @@ dispatch(signUpFailure(error.message))
 dispatch(signUpFailure(e.message))
     }
   }
-  return (
+  return currentUser.onBoardingComplete ? <Navigate to='/' /> :
     <div className="min-h-[90vh] w-screen grid place-content-center ">
       <form onSubmit={handelSubmit} className=" p-5 flex flex-col gap-4 rounded-lg overflow-hidden shadow-xl border-gray-600 border" >
         <div className="flex flex-col md:flex-row gap-4 items-center md:justify-between">
@@ -213,7 +213,7 @@ dispatch(signUpFailure(e.message))
         </div>
       </form>
     </div>
-  );
+  
 };
 
 export default OnBoarding;

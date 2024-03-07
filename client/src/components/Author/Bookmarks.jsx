@@ -9,6 +9,7 @@ const Bookmarks = () => {
   const [error, setError] = useState();
   const {currentUser} = useSelector(state => state.user)
   const [bookmarks,setBookmarks] = useState([])
+  const [empty,setEmpty] = useState('')
 
 
   async function fetchBookmarks(id){
@@ -71,6 +72,10 @@ const Bookmarks = () => {
      setLoading(false)
 
      }
+     else{
+      setLoading(false)
+      setEmpty("Your bookmarks will appear here")
+     }
 
 
 
@@ -103,11 +108,17 @@ const Bookmarks = () => {
 
   },[currentUser])
   return loading ? <div className="w-full h-[40vh] grid place-content-center"><Spinner /></div> :
+
     <div className="flex flex-col gap-4">
  {error &&    <Alert color={'failure'}>{error}</Alert>}
+ {empty && <p>{empty}</p>}
 
       {posts?.map(card => 
-      <Postcard key={card._id} post={card} />
+      <>
+     {card &&  <Postcard key={card?._id} post={card} />}
+   
+      </>
+      
         )}
 
       

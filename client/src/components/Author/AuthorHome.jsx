@@ -8,8 +8,9 @@ const AuthorHome = ({ userId, username, posts }) => {
 
   const navigate = useNavigate();
 
-  return (
+  return posts?.length ===0 ? <p>Your Posts will appear here</p> : (
     <div className="flex flex-col gap-4">
+
       {posts?.map((post) => (
         <div
           onClick={() => navigate(`/${username}/${post?.slug}`)}

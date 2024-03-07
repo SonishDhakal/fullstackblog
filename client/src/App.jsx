@@ -9,6 +9,8 @@ import Author from './pages/Author'
 import Write from './pages/Write'
 import PostTemplate from './pages/PostTemplate'
 import Dashboard from './pages/Dashboard'
+import AuthenticatedProvider from './components/provider/AuthenticatedProvider'
+import UnAuthenticatedProvider from './components/provider/UnAuthenticatedProvider'
 
 const App = () => {
   return (
@@ -18,12 +20,17 @@ const App = () => {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route element={<UnAuthenticatedProvider />}>
         <Route path='/auth' element={<Auth />} />
-        <Route path='/onboarding' element={<OnBoarding />} />
+        </Route>
+       
         <Route path='/:authorId' element={<Author />} />
-        <Route path='/write' element={<Write />} />
         <Route path='/:username/:slug' element={<PostTemplate />}  />
+       <Route element={<AuthenticatedProvider />}>
+       <Route path='/onboarding' element={<OnBoarding />} />
+        <Route path='/write' element={<Write />} />
         <Route path='/dashboard' element={<Dashboard />}  />
+       </Route>
 
 
       </Routes>
