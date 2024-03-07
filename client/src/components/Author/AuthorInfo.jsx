@@ -7,14 +7,14 @@ import {Button} from 'flowbite-react'
 
 export const AuthorInfo = ({profile,authorId,posts,changeState,currentState,setCurrentState,settings,setSettings}) => {
 
-  const menu = ["Home", "About", "Featured", "Bookmarks"];
+  const menu = ["Home", "About", "Bookmarks"];
   const {currentUser} = useSelector(state => state.user)
 
  
   return (
     <div className="flex flex-col gap-4 ">
-    <div className="flex  justify-between ">
-   <div className='flex gap-4'>
+    <div className="flex  justify-between sm:flex-row flex-col gap-4">
+   <div className='flex gap-4 sm:flex-row flex-col '>
    <div className="flex gap-3 flex-col">
         <img
           className="w-40 h-40 rounded-lg"
@@ -41,17 +41,17 @@ export const AuthorInfo = ({profile,authorId,posts,changeState,currentState,setC
       
       </div>
    </div>
-   {currentUser?._id ===profile?.userId && <div className='flex flex-col justify-end'>
-   <button onClick={() => setSettings(true)} className='border rounded-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700  transition-all'  ><span className='flex gap-3 items-center'><RiEdit2Line /> Edit Profile</span></button>
-   </div>}
+   {currentUser?._id ===profile?.userId && 
+
+   <div className='flex sm:self-end'>   <button onClick={() => setSettings(true)} className='border  rounded-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700  transition-all'  ><span className='flex gap-3 items-center'><RiEdit2Line /> Edit Profile</span></button></div>   }
     </div>
     <div>
       <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-4">
-        {menu.map((item) => (
+        {menu.map((item,index) => (
           <li
             id={item}
             onClick={changeState}
-            key={item}
+            key={index}
             className={`${
               currentState === item &&
               "border-b border-gray-500 dark:border-gray-300 pb-3 -mb-[1px]"

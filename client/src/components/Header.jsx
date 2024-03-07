@@ -60,7 +60,7 @@ label={<Avatar alt='user settings'  img={currentUser.profilePicture ? currentUse
 
           </Link>
   <Dropdown.Item>Dashboard</Dropdown.Item>
-  <Dropdown.Item>Settings</Dropdown.Item>
+
   <Dropdown.Item onClick={handleSignout}>Signout</Dropdown.Item>
 
 </Dropdown>

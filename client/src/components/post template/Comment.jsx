@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RiDeleteBin2Line, RiHeart2Line } from "react-icons/ri";
+import {Link} from 'react-router-dom'
 import moment from "moment";
 const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
   const [writer, setWriter] = useState({});
@@ -71,7 +72,7 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
     fetchUser();
   }, [comment]);
   return (
-    <div className="flex flex-col gap-2 border-b pb-3">
+    <Link to={`/${writer.username}`} className="flex flex-col gap-2 border-b pb-3 ">
       <div className="flex items-center gap-3">
         <img
           className="w-10 h-10 rounded-full"
@@ -107,7 +108,7 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
           />
         )}</span>}
       </div>
-    </div>
+    </Link>
   );
 };
 

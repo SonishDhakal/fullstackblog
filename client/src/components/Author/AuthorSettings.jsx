@@ -33,7 +33,7 @@ const AuthorSettings = ({ settings, setSettings, profile,setProfile }) => {
   return (
     settings && (
       <div className="fixed top-0 left-0 h-screen w-screen bg-black/[0.3] ">
-        <div className="fixed w-[700px]   top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg dark:bg-[rgb(16,23,42)] ">
+        <div className="fixed w-[300px] overflow-y-scroll h-full sm:w-[500px] md:w-[700px]   top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white rounded-lg dark:bg-[rgb(16,23,42)] ">
           <div className="border-b dark:border-b-gray-500 flex justify-between py-5 px-5 items-center">
             {currentState === "Profile" ||
             currentState === "Security" ||
@@ -51,8 +51,8 @@ const AuthorSettings = ({ settings, setSettings, profile,setProfile }) => {
             />
           </div>
           {/* //body */}
-          <div className="flex  ">
-            <ul className="border-r dark:border-r-gray-500  px-5 flex flex-col py-5 gap-4 ">
+          <div className="flex flex-col sm:flex-row  h-full overflow-y-scroll">
+            <ul className="border-r dark:border-r-gray-500  px-5 flex flex-row sm:flex-col py-5 gap-4 ">
               {sidebars.map((bar, index) => (
                 <li
                   onClick={() => setCurrentState(bar.name)}
@@ -70,7 +70,7 @@ const AuthorSettings = ({ settings, setSettings, profile,setProfile }) => {
                 </li>
               ))}
             </ul>
-            <div className="flex-1 p-4 h-[400px] overflow-y-scroll">
+            <div className="flex-1 p-4 min-h-[400px] overflow-y-scroll ">
               {currentState === "Profile" ? (
                 <ProfileSettings profile={profile} setProfile={setProfile} />
               ) : currentState === "Security" ? (

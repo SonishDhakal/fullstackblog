@@ -14,7 +14,7 @@ const data=  await res.json();
             if(!res.ok){
                return setError(data.message)
             }
-console.log(data.username)
+
             setUser(data.username)
 
         }

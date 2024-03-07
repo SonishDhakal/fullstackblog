@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AuthorInfo } from "../components/Author/AuthorInfo";
 import AuthorHome from "../components/Author/AuthorHome";
-import {Button} from 'flowbite-react'
+import {Alert, Button, Spinner} from 'flowbite-react'
 import AuthorAbout from "../components/Author/AuthorAbout";
 import Bookmarks from "../components/Author/Bookmarks";
 import AuthorSettings from "../components/Author/AuthorSettings";
@@ -109,29 +109,28 @@ const Author = () => {
 
   }, [authorId]);
   return errorpage ? (
-    <p>ERor 404</p>
-  ) : (
-    !loading && (
-      <div className="">
-        <div className="max-w-4xl mx-auto px-8 md:px-0">
-        <div className="w-full my-4">
-          {/* //nav section */}
-        <AuthorInfo setSettings={setSettings} settings={settings}  currentState={currentState} changeState={changeState} setCurrentState={setCurrentState} authorId={authorId} profile={profile} posts={posts} />
-          <div className="content py-2">
-      
+    <div className="w-screen h-screen grid place-content-center"><p>{errorpage}</p></div>
+  ) : loading ? <div className="w-screen h-screen grid place-content-center"><Spinner /></div> :
+  <div className="">
+  <div className="max-w-4xl mx-auto px-8 md:px-0">
+ {error &&    <Alert color={'failure'}>{error}</Alert>}
+  <div className="w-full my-4">
+    {/* //nav section */}
+  <AuthorInfo setSettings={setSettings} settings={settings}  currentState={currentState} changeState={changeState} setCurrentState={setCurrentState} authorId={authorId} profile={profile} posts={posts} />
+    <div className="content py-2 ">
+
 {currentState ==='Home' ?   <><AuthorHome posts={posts}  username={authorId} userId={profile?.userId}/> {showMore && <div className='flex justify-center mt-5'>
-  <Button onClick={handelShoreMore} color='blue'>Show More</Button>
+<Button onClick={handelShoreMore} color='blue'>Show More</Button>
 </div>} </> : currentState==='About' ?
 <AuthorAbout profile={profile}/> : <Bookmarks bookmarks={profile?.bookmarks}/>}
 
-          </div>
-        </div>
-        
-      </div>
-      <AuthorSettings setProfile={setProfile} profile={profile} setSettings={setSettings} settings={settings} />
-      </div>
-    )
-  );
+    </div>
+  </div>
+  
+</div>
+
+<AuthorSettings setProfile={setProfile} profile={profile} setSettings={setSettings} settings={settings} />
+</div>
 };
 
 export default Author;

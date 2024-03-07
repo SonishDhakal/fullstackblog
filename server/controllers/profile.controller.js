@@ -62,8 +62,10 @@ export const getProfile = async (req,res,next) =>{
             next(handelError(404, "Profile Not found"))
         }
         else{
+            const fetchUser = await User.findById(findProfile.userId)
+            const {username} = fetchUser._doc;
             const {profilePicture,firstName,lastName} = findProfile; 
-            res.status(200).json({profilePicture,firstName,lastName})
+            res.status(200).json({profilePicture,firstName,lastName,username})
         }
 
 

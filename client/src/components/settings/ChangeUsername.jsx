@@ -8,7 +8,7 @@ import {useNavigate} from 'react-router-dom'
 
 const ChangeUsername = () => {
   const { currentUser,error,loading } = useSelector((state) => state.user);
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({username:'',password:''});
   const dispatch = useDispatch();
   const navigate = useNavigate()
 

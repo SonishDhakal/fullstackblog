@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Postcard from '../Postcard';
 import {useSelector} from 'react-redux'
-
+import {Alert,Spinner} from 'flowbite-react' 
 
 const Bookmarks = () => {
   const [posts,setPosts] = useState([]);
@@ -13,8 +13,8 @@ const Bookmarks = () => {
 
   async function fetchBookmarks(id){
 
-    setLoading(true);
-    setError('')
+
+  
     try{
       const res = await fetch(`/api/post/getposts?postId=${id}`)
       if(!res.ok){
@@ -46,6 +46,8 @@ const Bookmarks = () => {
 
 
   async function fetchProfile(){
+    setLoading(true);
+    setError('')
     if(currentUser){
 
 
@@ -66,6 +68,7 @@ const Bookmarks = () => {
      } ))
 
      await setPosts(post)
+     setLoading(false)
 
      }
 
@@ -76,9 +79,15 @@ const Bookmarks = () => {
     catch(e){
 
       setError(e.message)
+      setLoading(false)
+
 
 
     }
+    }else{
+      setError('Something went wrong')
+      setLoading(false)
+
     }
     return
     
@@ -93,10 +102,12 @@ const Bookmarks = () => {
 
 
   },[currentUser])
-  return (
+  return loading ? <div className="w-full h-[40vh] grid place-content-center"><Spinner /></div> :
     <div className="flex flex-col gap-4">
+ {error &&    <Alert color={'failure'}>{error}</Alert>}
+
       {posts?.map(card => 
-      <Postcard key={card} post={card} />
+      <Postcard key={card._id} post={card} />
         )}
 
       
@@ -105,7 +116,7 @@ const Bookmarks = () => {
 
     </div>
 
-  )
+  
 }
 
 export default Bookmarks

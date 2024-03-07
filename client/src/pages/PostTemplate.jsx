@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import {  RiBookmark2Line, RiChat1Line, RiCopyleftLine, RiHeart2Line, RiLink, RiShareForward2Line  } from 'react-icons/ri'
-import {useParams} from 'react-router-dom'
+import {useParams,Link} from 'react-router-dom'
 import {Spinner} from 'flowbite-react'
 import moment from 'moment'
+
 
 import {useSelector} from 'react-redux'
 import Sidebar from '../components/post template/Sidebar'
@@ -178,8 +179,8 @@ setError(e.message)
 
   },[slug])
 
-  return loading ? <Spinner /> : (
-    error ? <p>{error}</p> : <div className='relative'>
+  return loading ? <div className="w-screen h-screen grid place-content-center"><Spinner /></div> : (
+    error ? <div className="w-screen h-screen grid place-content-center">Post not Found</div> : <div className='relative'>
       <Sidebar authorId={post.userId} comments={comments} setComments={setComments} postId={post.postId} commentBar={commentBar} setCommentBar={setCommentBar} currentUser={currentUser} />
       {commentBar && <div className='fixed top-0 left-0 h-full w-screen bg-black/[0.05] dark:bg-black/[0.2] z-40'>
 
@@ -193,10 +194,10 @@ setError(e.message)
         <span className='bg-gray-300 dark:bg-gray-600 p-1 w-max'>{post.category}</span>
         <h1 className='font-bold text-xl md:text-[3rem] leading-[3.2rem] text-center'>{post.title}</h1>
         <div className=" flex gap-4 items-center">
-        <div className=''>
+        <Link className='' to={`/${writer.username}`}>
           <img src={writer.profilePicture}  className='w-16 h-16 rounded-full'/>
     
-        </div>
+        </Link>
         <div className='flex-col gap-0 flex'>
           <h3 className=''>{`${writer.firstName} ${writer.lastName}`}</h3>
           <div className='flex gap-3 '>

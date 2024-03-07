@@ -120,11 +120,11 @@ useEffect(() =>{
     <div>
       <form onSubmit={handelSubmit} className="flex flex-col gap-4">
         {error && <Alert color={'failure'}>{error}</Alert>}
-        <div className="flex items-center gap-4 w-full">
+        <div className="flex items-center gap-4 flex-col sm:flex-row w-full">
           <div className="flex gap-2 flex-col items-center ">
             <label htmlFor="avatar" className="font-semibold">Avatar</label>
            <div className="w-24 h-24 rounded-full overflow-hidden cursor-pointer relative">
-            <input   onChange={handleImageChange} className="hidden" ref={imageREf} type="file" accept="image/*"  />
+            <input id="avatar"  onChange={handleImageChange} className="hidden" ref={imageREf} type="file" accept="image/*"  />
             {imageProgress && <CircularProgressbar
 
 value={imageProgress || 0}
@@ -173,7 +173,7 @@ styles={{
         </div>
         <div>
           <label htmlFor="gender">Gender</label>
-          <Select onChange={handelChange} id="gender" value={profile?.gender} id="gender">
+          <Select onChange={handelChange} id="gender" value={profile?.gender} >
             <option value={"undefined"}>Rather not say</option>
             <option value={"male"}>Male</option>
             <option value={"female"}>Female</option>
