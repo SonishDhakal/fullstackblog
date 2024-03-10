@@ -72,8 +72,8 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
     fetchUser();
   }, [comment]);
   return (
-    <Link to={`/${writer.username}`} className="flex flex-col gap-2 border-b pb-3 ">
-      <div className="flex items-center gap-3">
+    <div  className="flex flex-col gap-2 border-b pb-3 ">
+      <Link to={`/${writer.username}`} className="flex items-center gap-3">
         <img
           className="w-10 h-10 rounded-full"
           src={writer.profilePicture}
@@ -87,7 +87,7 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
             {moment(comment.createdAt).fromNow()}
           </span>
         </div>
-      </div>
+      </Link>
       <div>
         <p className="text-gray-500">{comment.content}</p>
       </div>
@@ -108,7 +108,7 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
           />
         )}</span>}
       </div>
-    </Link>
+    </div>
   );
 };
 

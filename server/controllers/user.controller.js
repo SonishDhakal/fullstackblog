@@ -1,3 +1,4 @@
+import Profile from "../../client/src/redux/user/profile.modal.js";
 import User from "../modals/user.modal.js";
 import { handelError } from "../utils/handelError.js";
 import bcryptjs from "bcryptjs";
@@ -132,6 +133,24 @@ export const getUsername = async (req,res,next) =>{
         const user = await User.findById(req.params.userId)
         const {username} = user._doc
         res.status(200).json({username})
+
+    }
+    catch(e){
+        next(e)
+    }
+}
+
+export const getUserProfile = async (req,res,next) =>{
+    try{
+        const finduser = await User.findById(req.params.userId)
+        const findProfile = await Profile.findOne({userId:req.params.userId})
+
+
+        const {username,_id} = finduser._doc
+        const {firstName,lastName,profilePicture} = findProfile._doc
+
+        res.status(200).json({username,firstName,lastName,profilePicture,_id})
+
 
     }
     catch(e){

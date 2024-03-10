@@ -51,7 +51,7 @@ const AuthorSettings = ({ settings, setSettings, profile,setProfile }) => {
             />
           </div>
           {/* //body */}
-          <div className="flex flex-col sm:flex-row border border-black  h-[400px] overflow-y-scroll">
+          <div className="flex flex-col sm:flex-row   h-[400px] overflow-y-scroll">
             <ul className="border-r dark:border-r-gray-500  px-5 flex flex-row sm:flex-col py-5 gap-4 ">
               {sidebars.map((bar, index) => (
                 <li
