@@ -201,7 +201,7 @@ export const AuthorInfo = ({
           </div>) : (<div className="flex flex-col gap-4">
             {profile?.followers.length >0 ?
             (profile?.followers.map(item =>
-              <Stats users={user} setUsers={setUser} profile={profile} setProfile={setProfile} handelFollow={handelFollow} key={item} people={item}/>
+              <Stats name={'followers'} users={user} setUsers={setUser} profile={profile} setProfile={setProfile} handelFollow={handelFollow} key={item} people={item}/>
               ))
              :<p>No followers</p>}
 

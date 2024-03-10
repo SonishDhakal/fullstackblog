@@ -275,3 +275,33 @@ export const follow = async (req,res,next) =>{
         next(e)
     }
 }
+
+
+export const removefollow = async (req,res,next) =>{
+    const {authorId} = req.params;
+    const userId = req.user.id;
+    try{
+        const userProfile = await Profile.findOne({userId})
+        const authorProfile = await Profile.findOne({userId:authorId})
+
+
+        const {followers:userFollowers} = userProfile._doc;
+        const {following:authorFollowing} = authorProfile._doc;
+
+
+        const newUserFollowers = userFollowers.filter(item => item!==authorId)
+        const newAuthorFollowing =authorFollowing.filter(item => item!==userId)
+
+        const userProfiles=  await Profile.findOneAndUpdate({userId},{followers:newUserFollowers},{new:true})
+        const authorProfiles = await Profile.findOneAndUpdate({userId:authorId},{following:newAuthorFollowing},{new:true})
+
+        res.status(200).json({authorProfiles,userProfiles})
+
+
+
+    }
+    catch(e){
+        next(e)
+    }
+
+}

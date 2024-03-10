@@ -4,12 +4,13 @@ import {Link} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 
-const Stats = ({people,users,setUsers,setProfile}) => {
+const Stats = ({people,users,setUsers,setProfile,name,profile}) => {
 
     const [user,setUser] = useState();
     const [error,setError] = useState();
     const {currentUser} = useSelector(state => state.user)
     const navigate = useNavigate()
+console.log(users)
 
     async function fetchuser(){
         const res = await fetch(`/api/user/getuserProfile/${people}`);
@@ -44,10 +45,52 @@ const Stats = ({people,users,setUsers,setProfile}) => {
           }
 
           console.log(data.userProfiles.following)
+          if(data?.userProfiles._id ===profile._id){
+            console.log('gg')
+            setProfile({...profile, following:data.userProfiles.following,followers:data.userProfiles.followers})
+            
+          }
+
     
 
 
-          setProfile({...users, following:data.userProfiles.following,followers:data.userProfiles.followers})
+          setUsers({...users, following:data.userProfiles.following,followers:data.userProfiles.followers})
+
+
+    
+    
+    
+          
+          
+        } catch (error) {
+          setError(error.message)
+          
+        }
+      }
+    async function handelRemove(profileId){
+        if(!currentUser){
+          navigate('/auth')
+        }
+        setError(null)
+        try {
+          const res = await fetch(`/api/profile/removefollow/${profileId}`)
+          const data = await res.json();
+    
+          if(!res.ok){
+           return setError(data.message)
+          }
+
+          console.log(data.userProfiles.following)
+          if(data?.userProfiles._id ===profile._id){
+            console.log('removinhg')
+            setProfile({...profile, following:data.userProfiles.following,followers:data.userProfiles.followers})
+            
+          }
+
+    
+
+
+          setUsers({...users, following:data.userProfiles.following,followers:data.userProfiles.followers})
 
 
     
@@ -71,9 +114,11 @@ const Stats = ({people,users,setUsers,setProfile}) => {
            <p className='text-gray-500 text-sm'>{user?.username}</p>
        </div>
    </Link>
-   {currentUser?.username!==user?.username && <Button onClick={() => handelFollow(people)} color='green' className='w-20 h-10'>{(users?.following?.includes(people)) ?'Unfollow':'Follow'}</Button>}
 
-</div>
+{(name ==='followers' && currentUser._id===profile.userId) ?  <Button onClick={() => handelRemove(people)} color='green' className='w-20 h-10'>Remove</Button>
+: (currentUser?.username!==user?.username && <Button onClick={() => handelFollow(people)} color='green' className='w-20 h-10'>{(users?.following?.includes(people)) ?'Unfollow':'Follow'}</Button>)
+
+  }</div>
 
   )
 }
