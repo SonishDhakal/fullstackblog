@@ -88,7 +88,7 @@ export const AuthorInfo = ({
         <div className="flex gap-4 sm:flex-row flex-col ">
           <div className="flex gap-3 flex-col">
             <img
-              className="w-40 h-40 rounded-lg"
+              className="w-40 h-40 rounded-lg contain"
               src={profile?.profilePicture}
             />
             <div className="text-gray-500 flex gap-2">
@@ -148,7 +148,7 @@ export const AuthorInfo = ({
         <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-4">
           {menu.map((item, index) =>
             item === "Bookmarks" ? (
-              currentUser && (
+              currentUser._id===profile?.userId && (
                 <li
                   id={item}
                   onClick={changeState}

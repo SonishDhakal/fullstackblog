@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { RiDeleteBin2Line, RiHeart2Line } from "react-icons/ri";
+import { RiHeart2Line } from "react-icons/ri";
+import {MdOutlineDelete} from 'react-icons/md'
 import {Link} from 'react-router-dom'
 import moment from "moment";
 const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
@@ -72,7 +73,7 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
     fetchUser();
   }, [comment]);
   return (
-    <div  className="flex flex-col gap-2 border-b pb-3 ">
+    <div  className="flex flex-col gap-2 border-b pb-3 group">
       <Link to={`/${writer.username}`} className="flex items-center gap-3">
         <img
           className="w-10 h-10 rounded-full"
@@ -102,9 +103,9 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
           {comment.likes.length}
         </span>
        {currentUser && <span> {((currentUser._id === comment.userId) || (currentUser._id===authorId)) &&  (
-          <RiDeleteBin2Line
+          <MdOutlineDelete
             onClick={handelDelete}
-            className="text-red-400 text-lg cursor-pointer"
+            className="text-red-400 text-lg cursor-pointer hidden group-hover:flex transition-all"
           />
         )}</span>}
       </div>
