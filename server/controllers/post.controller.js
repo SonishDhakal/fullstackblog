@@ -162,11 +162,11 @@ export const getPost = async (req, res, next) => {
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { postId: req.query.postId }),
-      ...(req.query.searchTerm && {
+      ...(req.query.search && {
         $or: [
-          { title: { $regex: req.query.searchTerm, $options: "i" } },
-          { tags: { $regex: req.query.searchTerm, $options: "i" } },
-          { content: { $regex: req.query.searchTerm, $options: "i" } },
+          { title: { $regex: req.query.search, $options: "i" } },
+          { tags: { $regex: req.query.search, $options: "i" } },
+          { content: { $regex: req.query.search, $options: "i" } },
         ],
       }),
     };

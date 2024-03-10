@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {  RiBookmark2Line, RiChat1Line, RiCopyleftLine, RiHeart2Line, RiLink, RiShareForward2Line  } from 'react-icons/ri'
-import {useParams,Link} from 'react-router-dom'
+import {useParams,Link,useNavigate} from 'react-router-dom'
 import {Spinner} from 'flowbite-react'
 import moment from 'moment'
 
@@ -8,6 +8,7 @@ import moment from 'moment'
 import {useSelector} from 'react-redux'
 import Sidebar from '../components/post template/Sidebar'
 const PostTemplate = () => {
+  const navigate = useNavigate();
   const {slug} = useParams()
   const [loading,setLoading] = useState(false);
   const [error,setError] = useState('');
@@ -150,6 +151,10 @@ setError(e.message)
 
 
   async function handelLikes(){
+    if(!currentUser){
+      navigate('/auth')
+
+    }
 
     setError('')
     try{

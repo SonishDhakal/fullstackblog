@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { RiHeart2Line } from "react-icons/ri";
 import {MdOutlineDelete} from 'react-icons/md'
+import {useNavigate} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import moment from "moment";
 const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
   const [writer, setWriter] = useState({});
   const [error, setError] = useState("");
   
+  const navigate = useNavigate()
 
   async function handelDelete() {
     try{
@@ -48,6 +50,11 @@ const Comment = ({ currentUser, comment, setComments, comments,authorId }) => {
   }
 
   async function handelLikes() {
+    if(!currentUser){
+      navigate('/auth')
+
+    }
+
     setError("");
     try {
       const res = await fetch(`/api/comment/like/${comment._id}`);

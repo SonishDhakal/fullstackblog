@@ -148,7 +148,7 @@ export const AuthorInfo = ({
         <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-4">
           {menu.map((item, index) =>
             item === "Bookmarks" ? (
-              currentUser._id===profile?.userId && (
+              currentUser?._id===profile?.userId && (
                 <li
                   id={item}
                   onClick={changeState}
