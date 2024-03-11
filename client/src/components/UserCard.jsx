@@ -74,9 +74,9 @@ const UserCard = ({ userId }) => {
     fetchProfile();
   }, [userId]);
   return (
-    currentUser.username !== profile.username &&
+    currentUser?.username !== profile?.username &&
     profile && (
-      <div className="flex justify-between items-center">
+      <div className="flex sm:justify-between sm:items-center sm:flex-row flex-col gap-3 sm:gap-0">
         <Link to={`/${profile.username}`} className="flex items-center gap-4">
           <img
             src={profile.profilePicture}

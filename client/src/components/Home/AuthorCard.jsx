@@ -72,7 +72,7 @@ const AuthorCard = ({ author }) => {
     }
   }, [currentUser]);
   return (
-    currentUser.username !== user && (
+    currentUser?.username !== user && (
       <div className="flex items-center justify-between">
         <Link to={`/${user}`} className="flex items-center gap-4 flex-1">
           <img src={author.profilePicture} className="w-10 h-10 rounded-full" />
