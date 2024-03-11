@@ -11,6 +11,7 @@ import PostTemplate from './pages/PostTemplate'
 import Dashboard from './pages/Dashboard'
 import AuthenticatedProvider from './components/provider/AuthenticatedProvider'
 import UnAuthenticatedProvider from './components/provider/UnAuthenticatedProvider'
+import Search from './pages/Search'
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/search' element={<Search />} />
         <Route element={<UnAuthenticatedProvider />}>
         <Route path='/auth' element={<Auth />} />
         </Route>

@@ -5,6 +5,7 @@ import TopPosts from '../components/Home/TopPosts'
 import TopTags from '../components/Home/TopTags'
 import TopAuthor from '../components/Home/TopAuthor'
 import {useLocation} from 'react-router-dom'
+const menu = ['travel', "guide", "locations", "tricks", "top-10"]
 
 const Home = () => {
   const {search} = useLocation()
@@ -38,7 +39,7 @@ const Home = () => {
   return (tag || tag==='') &&
     <div className='flex container max-w-6xl mx-auto my-12 px-12 xl:px-0 gap-12'>
       <div className='flex-1 '>
-        <Topbar setTag={setTag} search={tag}/>
+        <Topbar link={`/?tag=`} menu={menu} setTag={setTag} search={tag} home={true}/>
 <Posts search={`/?category=${tag}&limit=10`}/>
 
       </div>

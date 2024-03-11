@@ -64,8 +64,8 @@ export const getProfile = async (req,res,next) =>{
         else{
             const fetchUser = await User.findById(findProfile.userId)
             const {username} = fetchUser._doc;
-            const {profilePicture,firstName,lastName} = findProfile; 
-            res.status(200).json({profilePicture,firstName,lastName,username})
+            const {profilePicture,firstName,lastName,bio} = findProfile._doc; 
+            res.status(200).json({profilePicture,firstName,lastName,username,bio})
         }
 
 
@@ -326,6 +326,57 @@ export const randomProfiles =  async (req,res,next) => {
         
 
       
+
+    }
+    catch(e){
+        next(e)
+    }
+}
+
+
+export const searchProfile = async (req,res,next) =>{
+    try{
+        const Profilequery = {
+        
+            ...(req.query.search && {
+              $or: [
+                { firstName: { $regex: req.query.search, $options: "i" } },
+                { lastName: { $regex: req.query.search, $options: "i" } },
+                { bio: { $regex: req.query.search, $options: "i" } },
+              ],
+            }),
+          };
+
+          const userQuery =  {
+            ...(req.query.search && {
+                $or: [
+                  { username: { $regex: req.query.search, $options: "i" } },
+                  
+                ],
+              }),
+
+          }
+
+
+          let allProfiles = await Profile.find(Profilequery,{userId:1, _id:0});
+          let allUsers = await User.find(userQuery,{_id:1} )
+
+
+          const newProfiles = allProfiles.map(item => item.userId)
+          const newUsers = allUsers.map(item => item._id.toString())
+
+          let all = [...newProfiles,...newUsers]
+          let uniqueA =  [...new Set(all)];
+
+          
+
+
+
+
+          res.status(200).json(uniqueA)
+        
+
+        
 
     }
     catch(e){

@@ -39,8 +39,10 @@ const Posts = ({search}) => {
     }
   }
   useEffect(() =>{
-    fetchPosts();
+if(search){
+  fetchPosts();
 
+}
   },[search])
   return loading ? <div className='w-full h-[40vh] grid place-content-center'><Spinner /></div> : <div>
     <div className="flex flex-col gap-4 my-4 mx-4">

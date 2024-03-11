@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {Avatar, Button, Dropdown, Navbar, TextInput} from 'flowbite-react'
 import {RiSearchLine,RiMoonLine, RiSunLine, RiPencilLine} from 'react-icons/ri'
 import {useSelector,useDispatch} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 import { signoutSuccess } from '../redux/user/userSlice'
 import { changeTheme } from '../redux/theme/themeSlice'
 const Header = () => {
 
   const {currentUser} = useSelector(state => state.user)
   const {theme} = useSelector(state => state.theme)
+  const [search,setSearch] = useState()
+  const navigate = useNavigate()
   
 const dispatch = useDispatch()
 
@@ -19,16 +21,26 @@ const dispatch = useDispatch()
     }
     
   }
+
+  async function handelSubmit(e){
+    e.preventDefault();
+navigate(`/search?q=${search}&in=search`)
+
+  }
   return (
     <Navbar className='border-b border-2 bg-transparent '>
         <div className='flex gap-2 items-center'>
         <Navbar.Brand as={'a'} href='/'>
             <img className='md:w-36 w-20' src='/logo.png' />
         </Navbar.Brand>
-        <TextInput   icon={RiSearchLine} placeholder='Search '  className='hidden lg:flex'  />
-        <Button color='gray' pill className='flex lg:hidden w-10 h-10'>
+        <form onSubmit={handelSubmit}>
+        <TextInput onChange={(e) => setSearch(e.target.value)}   icon={RiSearchLine} placeholder='Search '  className='hidden lg:flex'  />
+        </form>
+       <Link to={'/search'}>
+       <Button  color='gray' pill className='flex lg:hidden w-10 h-10'>
           <RiSearchLine  />
         </Button>
+        </Link>
         </div>
       
         <div className='flex gap-3 items-center'>
