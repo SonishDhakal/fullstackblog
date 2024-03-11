@@ -5,7 +5,7 @@ const Topbar = ({search,setTag,menu,home,link}) => {
     console.log(search)
   return (
     <div>
-          <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-6">
+          <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-2 sm:gap-6">
          {home &&  <Link onClick={() => setTag('')} to={'/'} className={`${
                   search === '' &&
                   'text-gray-800 dark:text-gray-200 font-semibold border-b border-gray-500 dark:border-gray-300 pb-3 -mb-[1px]'

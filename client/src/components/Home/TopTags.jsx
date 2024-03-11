@@ -29,7 +29,7 @@ const TopTags = () => {
   <h2 className='text-center font-semibold text-lg '>Top Topics</h2>
   <div className='flex flex-wrap gap-3 mt-2'>
   {tags.map(item => 
-    <Link className='bg-gray-100 dark:bg-gray-800 rounded-full py-1 px-2' key={item}>{item}</Link>)}
+    <Link to={`/search?in=search&q=${item}`} className='bg-gray-100 dark:bg-gray-800 rounded-full py-1 px-2' key={item}>{item}</Link>)}
   </div>
   
 

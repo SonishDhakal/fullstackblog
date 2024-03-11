@@ -81,6 +81,9 @@ const PostTemplate = () => {
   }
 
   async function handelBookmarks(){
+    if(!currentUser){
+      navigate('/auth')
+    }
     try{
       const res = await fetch(`/api/profile/addbookmark/${post.postId}`);
       const data = await res.json();
@@ -196,7 +199,7 @@ setError(e.message)
       {/* //full contaien */}
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-6 '>
-        <span className='bg-gray-300 dark:bg-gray-600 p-1 w-max'>{post.category}</span>
+        <Link to={`/search?q=${post.category}&in=category`} className='bg-gray-300 dark:bg-gray-600 p-1 w-max'>{post.category}</Link>
         <h1 className='font-bold text-xl md:text-[3rem] leading-[3.2rem] text-center'>{post.title}</h1>
         <div className=" flex gap-4 items-center">
         <Link className='' to={`/${writer.username}`}>
@@ -232,7 +235,7 @@ setError(e.message)
         </div>
        </div>
        <div className='flex gap-4'>
-        {post.tags && post.tags.map((tag) => <span className='bg-gray-300 dark:bg-gray-600 p-2 rounded-md w-max' key={tag}>{tag}</span>)}
+        {post.tags && post.tags.map((tag) => <Link to={`/search?in=search&q=${tag}`}  className='bg-gray-300 dark:bg-gray-600 p-2 rounded-md w-max' key={tag}>{tag}</Link>)}
        </div>
       </div>
       

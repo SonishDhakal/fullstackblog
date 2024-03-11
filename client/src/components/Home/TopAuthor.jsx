@@ -26,7 +26,7 @@ const [error,setError] = useState(null);
 <div>
   <h2 className='text-center mb-4 font-semibold'>Suggested Users</h2>
   <div className='flex flex-col gap-4'>
-    {author.map(item => <AuthorCard key={item.userId} author={item} />)}
+    {author.map(item => <AuthorCard   key={item.userId} author={item} />)}
   </div>
 </div>
   

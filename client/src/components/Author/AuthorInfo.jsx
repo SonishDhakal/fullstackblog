@@ -26,7 +26,7 @@ export const AuthorInfo = ({
   const [stateState,setStatState]= useState('following')
   const [modal,setModal] = useState(false)
   const navigate = useNavigate()
-  console.log()
+
 
   async function handelFollow(profileId){
     if(!currentUser){
