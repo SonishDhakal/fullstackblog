@@ -12,6 +12,7 @@ const TextEditorSidebar = ({ form, setForm,error,setError,setLoading,loading }) 
   const [imageuploadProgress, setImageUploadProgress] = useState("");
   const imageRef = useRef();
   const navigate = useNavigate()
+  const [ImageLoading,setImageLoading] = useState(false)
 
 
   const [slugError,setSlugError] = useState('');
@@ -118,8 +119,9 @@ const TextEditorSidebar = ({ form, setForm,error,setError,setLoading,loading }) 
 
     const fileName = new Date().getTime() + tempImage.file.name;
     const storageRef = ref(storage, fileName);
+    setImageLoading(true)
 
-    setLoading(true)
+
     const uploadTask = uploadBytesResumable(storageRef, tempImage.file);
 
     uploadTask.on(
@@ -131,14 +133,14 @@ const TextEditorSidebar = ({ form, setForm,error,setError,setLoading,loading }) 
       },
       (e) => {
 setError(e.message)
-setLoading(false)
+setImageLoading(false)
 
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
           setForm({ ...form, featuredImage: downloadUrl });
           setImageUploadProgress(null);
-          setLoading(false)
+          setImageLoading(false)
 
         });
       }
@@ -152,10 +154,10 @@ setLoading(false)
       <div className="dark:bg-gray-700 bg-gray-100/[0.8] py-3 px-5 rounded-lg flex flex-col gap-4">
         <h3 className="text-lg font-semibold">Publish Article</h3>
         <div className="flex gap-2">
-          <Button disabled={loading} onClick={handelDraft} outline className="w-15  text-xs">
-          {loading ? <Spinner/> : 'Save Draft'}
+          <Button disabled={loading || ImageLoading} onClick={handelDraft} outline className="w-15  text-xs">
+          {loading || ImageLoading? <Spinner/> : 'Save Draft'}
           </Button>
-          <Button disabled={loading} onClick={handelPost} className="w-15  text-xs">{loading ? <Spinner/> : 'Save & Publish '}</Button>
+          <Button disabled={loading || ImageLoading} onClick={handelPost} className="w-15  text-xs">{loading || ImageLoading ? <Spinner/> : 'Save & Publish '}</Button>
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="slug">Slug</Label>
@@ -206,17 +208,18 @@ setLoading(false)
           )}
 
           <div className="">
-            {form?.featuredImage ? (
-              <img
-                className=" object-contain w-full h-full"
-                src={form.featuredImage}
-              />
-            ) : tempImage.url ? (
+            { tempImage.url ? (
               <img
                 className="h-full object-contain w-full"
                 src={tempImage.url}
               />
-            ) : (
+            ): form?.featuredImage ? (
+              <img
+                className=" object-contain w-full h-full"
+                src={form.featuredImage}
+              />
+            )  
+             : (
               <p>Upload Image</p>
             )}
           </div>
@@ -224,7 +227,7 @@ setLoading(false)
           {/* img */}
         </div>
 
-        <Button disabled={loading} onClick={uploadImage}>{loading ? <Spinner/> : 'Upload '}</Button>
+        <Button disabled={loading || ImageLoading} onClick={uploadImage}>{loading || ImageLoading ? <Spinner/> : 'Upload '}</Button>
       </div>
       {/* /OHTER */}
       <div className="flex flex-col gap-4 dark:bg-gray-700 bg-gray-100/[0.8] py-3 px-5 rounded-lg ">

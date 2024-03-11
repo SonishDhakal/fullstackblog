@@ -36,13 +36,13 @@ const Home = () => {
 
 
   return (tag || tag==='') &&
-    <div className='flex container max-w-6xl mx-auto my-12 px-12 xl:px-0'>
+    <div className='flex container max-w-6xl mx-auto my-12 px-12 xl:px-0 gap-12'>
       <div className='flex-1 '>
         <Topbar setTag={setTag} search={tag}/>
 <Posts search={`/?category=${tag}&limit=10`}/>
 
       </div>
-      <div className="sidebar">
+      <div className="sidebar w-[300px] hidden  lg:flex flex-col gap-12 ">
         <TopPosts />
         <TopTags/>
         <TopAuthor />

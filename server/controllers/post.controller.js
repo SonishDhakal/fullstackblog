@@ -222,3 +222,46 @@ export const like = async (req, res, next) => {
     next(e);
   }
 };
+
+
+export const popularPosts = async (req,res,next) =>{
+  try{
+
+
+    const randomPosts = await Post.aggregate([
+      {$sample: {size:5}}
+    ])
+
+    res.status(200).json({randomPosts})
+
+  }
+  catch(e){
+    next(e)
+
+  }
+}
+
+export async function tags(req,res,next){
+  try{
+    const getTags = await Post.find({}, {tags:1, _id:0})
+    const newTags = getTags.map(item => item.tags)
+
+
+
+const filteredData = newTags.filter((item) => item.length > 0);
+
+const uniqueSet = new Set(filteredData.flat()); 
+const tags = Array.from(uniqueSet); 
+
+res.status(200).json(tags)
+
+
+   
+
+  }
+  catch(e){
+    next(e)
+  }
+
+
+}

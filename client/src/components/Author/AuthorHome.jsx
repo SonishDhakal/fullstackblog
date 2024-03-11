@@ -8,7 +8,7 @@ const AuthorHome = ({ userId, username, posts }) => {
 
   const navigate = useNavigate();
 
-  return posts?.length ===0 ? <p>Your Posts will appear here</p> : (
+  return posts?.length ===0 ? <p>No posts</p> : (
     <div className="flex flex-col gap-4">
 
       {posts?.map((post) => (

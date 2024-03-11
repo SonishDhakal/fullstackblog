@@ -305,3 +305,30 @@ export const removefollow = async (req,res,next) =>{
     }
 
 }
+
+
+export const randomProfiles =  async (req,res,next) => {
+    try
+    {
+        const randomProfile = await Profile.aggregate([
+            {$sample: {size:5}},
+            {$project:{
+                profilePicture:1,
+                lastName:1,
+                firstName:1,
+                userId:1,
+                bio:1,
+                _id:0
+            }}
+          ])
+          res.status(200).json(randomProfile)
+
+        
+
+      
+
+    }
+    catch(e){
+        next(e)
+    }
+}
