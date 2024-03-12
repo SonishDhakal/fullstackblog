@@ -193,16 +193,20 @@ const Signin = ({ setCurrentState }) => {
           id="email"
           min={4}
         />
+        <div>
         <TextInput
           required
           minLength={8}
           maxLength={16}
           onChange={(e) => setFrom({ ...form, password: e.target.value })}
           icon={RiLockPasswordLine}
-          placeholder="password"
+          placeholder="Password"
           id="passowrd"
           type="password"
         />
+        <span onClick={() =>setCurrentState('forgot')} className="text-right block mt-3 hover:underline cursor-pointer">Forgot password?</span>
+        </div>
+
         <Button disabled={loading}
           type="submit"
           gradientDuoTone={"redToYellow"}

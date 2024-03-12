@@ -14,6 +14,7 @@ const Home = () => {
   const [user,setUser] = useState({})
 
 
+
   const [tag,setTag] = useState(null);
 
 
@@ -46,6 +47,8 @@ const Home = () => {
       <div className='flex-1 '>
         <Topbar link={`/?tag=`} menu={menu} setTag={setTag} search={tag} home={true}/>
 <Posts search={`/?category=${tag}&limit=10`}/>
+
+
 
       </div>
       <div className="sidebar w-[300px] hidden  lg:flex flex-col gap-12 ">
