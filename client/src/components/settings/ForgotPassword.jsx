@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Button,Spinner,TextInput } from "flowbite-react";
 import { useSelector } from "react-redux";
-const ForgotPassword = ({}) => {
+import { RiArrowLeftLine } from "react-icons/ri";
+const ForgotPassword = ({setCurrentState}) => {
   const [state, setState] = useState("initial");
   const { currentUser } = useSelector((state) => state.user);
   const [codeId, setCodeId] = useState();
@@ -170,7 +171,7 @@ setLoading(false)
   }, [ isStarted, remainingTime]);
   return (
     <div className="flex flex-col gap-4">
-      {currentUser ? <h2>Forgot Passoword</h2> : ''}
+      {currentUser ? <h2>Forgot Passoword</h2> : <RiArrowLeftLine className="cursor-pointer text-xl" onClick={() => setCurrentState('signin')} />}
       {state === "initial" ? (
         <div className="px-10 flex flex-col justify-center text-center gap-4 ">
           <p>
@@ -194,7 +195,7 @@ setLoading(false)
 
         </div>
       ) : state === "mid" ? (
-        <div className="w-[50%] mx-auto">
+        <div className="w-[90%] mx-auto">
                        <div className="flex gap-4">
                 <TextInput
                   maxLength={1}
@@ -231,7 +232,7 @@ setLoading(false)
       ) : (
         <div>
             <TextInput onChange={(e) => setPassword(e.target.value)} placeholder="New Password"/>
-            {!currentUser && <a href="/auth" className="text-right block mt-3 hover:underline">Signin</a>}
+            {!currentUser && <span onClick={() => setCurrentState('signin')} className="text-right block mt-3 hover:underline">Signin</span>}
             <Button disabled={(!password || loading)} onClick={changePass} className="my-3 flex mx-auto" outline>Change Password</Button>
             {success && <Alert color={'success'}>Password Changed Successfully</Alert>}
             {error && <Alert color={'failure'}>{error}</Alert>}
