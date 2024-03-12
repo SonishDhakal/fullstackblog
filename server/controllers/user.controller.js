@@ -85,7 +85,7 @@ export const updatePassword = async (req,res,next) =>{
 export const forgotPassword = async (req,res,next) =>{
     try{
         const hashedPassword = bcryptjs.hashSync(req.body.password, 10);
-        const updaePass = await User.findByIdAndUpdate(req.user.id, {password:hashedPassword})
+        const updaePass = await User.findOneAndUpdate({email:req.body.email}, {password:hashedPassword})
         res.status(200).json('Success');
 
     }

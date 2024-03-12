@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Button,Spinner,TextInput } from "flowbite-react";
 import { useSelector } from "react-redux";
-const ForgotPassword = () => {
+const ForgotPassword = ({}) => {
   const [state, setState] = useState("initial");
   const { currentUser } = useSelector((state) => state.user);
   const [codeId, setCodeId] = useState();
@@ -11,6 +11,7 @@ const ForgotPassword = () => {
   const [loading,setLoading] = useState(false)
   const [success,setSuccess] = useState(null)
   const [password,setPassword] = useState(null)
+  const [email,setEmail] = useState(null)
 
 
   const [remainingTime, setRemainingTime] = useState(5 * 60 * 1000); // 5 minutes in milliseconds
@@ -40,7 +41,7 @@ return setError('New Password must contain at least 8 characters, 1 lowercase le
         headers:{
           'Content-type': 'application/json'
         },
-        body:JSON.stringify({password})
+        body:JSON.stringify({password,email})
       })
 
       const data = await res.json()
@@ -65,6 +66,7 @@ return setError('New Password must contain at least 8 characters, 1 lowercase le
   }
 
   async function verifyCode() {
+    setError(null)
     setLoading(true)
 
     const finalCode = vcode.join("");
@@ -83,7 +85,7 @@ return setError('New Password must contain at least 8 characters, 1 lowercase le
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ code: finalCode, codeId, userId:currentUser._id }),
+        body: JSON.stringify({ code: finalCode, codeId, userId:currentUser ? currentUser._id : null, email }),
       });
 
       const data = await res.json();
@@ -103,8 +105,18 @@ setState('end')
   }
 
   async function sendVerificationCode() {
+    setError(null)
 
-    setLoading(true)
+   if(!currentUser){
+    if(!email){
+      console.log('gg')
+      return setError("Email is required")
+     }
+
+   }
+
+   setLoading(true)
+
 
     try {
       const res = await fetch("/api/verificationcode/send", {
@@ -112,7 +124,8 @@ setState('end')
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ email: currentUser.email }),
+
+        body: JSON.stringify({ email: currentUser ? currentUser.email : email }),
       });
 
       const data = await res.json();
@@ -157,7 +170,7 @@ setLoading(false)
   }, [ isStarted, remainingTime]);
   return (
     <div className="flex flex-col gap-4">
-      <h2>Forgot Passoword</h2>
+      {currentUser ? <h2>Forgot Passoword</h2> : ''}
       {state === "initial" ? (
         <div className="px-10 flex flex-col justify-center text-center gap-4 ">
           <p>
@@ -165,8 +178,9 @@ setLoading(false)
             A four digit digit Verificaion Code Will be sent to your registered
             Email adress.
           </p>
+         {!currentUser &&  <TextInput type="email" onChange={(e) => setEmail(e.target.value)} placeholder="email" />}
           <div className="flex justify-center">
-            <Button
+            <Button type="submit"
             disabled={loading}
               onClick={sendVerificationCode}
               outline
@@ -175,7 +189,9 @@ setLoading(false)
             >
               {loading ? <Spinner /> : 'Send'}
             </Button>
-          </div>{" "}
+          </div>
+          {error && <Alert color={'failure'}>{error}</Alert>}
+
         </div>
       ) : state === "mid" ? (
         <div className="w-[50%] mx-auto">
@@ -215,6 +231,7 @@ setLoading(false)
       ) : (
         <div>
             <TextInput onChange={(e) => setPassword(e.target.value)} placeholder="New Password"/>
+            {!currentUser && <a href="/auth" className="text-right block mt-3 hover:underline">Signin</a>}
             <Button disabled={(!password || loading)} onClick={changePass} className="my-3 flex mx-auto" outline>Change Password</Button>
             {success && <Alert color={'success'}>Password Changed Successfully</Alert>}
             {error && <Alert color={'failure'}>{error}</Alert>}

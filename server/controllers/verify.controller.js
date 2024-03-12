@@ -70,7 +70,7 @@ export const sendVerificationCode = async (req,res,next) =>{
 
 export const verifyCode = async (req,res,next) => {
 
-    const {code, codeId, userId} = req.body;
+    const {code, codeId, userId,email} = req.body;
 
 
 
@@ -91,6 +91,38 @@ export const verifyCode = async (req,res,next) => {
 
 
         if(findCode.code ===code){
+            if(!userId){
+                const check = await User.findOneAndUpdate({email},{
+                    emailVerified:true,
+                },{new:true})
+    
+    
+                if(check){
+                    const {password, ...rest} = check._doc
+    
+    
+                const token = jwt.sign(
+                    {
+                        id:check._id,
+                        emailVerified: check.emailVerified,
+                        onBoardingComplete:check.onBoardingComplete
+    
+                    },
+                    process.env.JWT_SECRET
+                )
+    
+                
+                 
+    
+                
+                
+    
+    
+    
+             return  res.status(200).cookie('access_token', token ,{httpOnly:true}).json(rest)
+                }
+
+            }
 
             const check = await User.findByIdAndUpdate(userId,{
                 emailVerified:true,
