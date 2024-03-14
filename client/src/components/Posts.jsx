@@ -7,7 +7,7 @@ const Posts = ({search}) => {
   const [posts,setPosts] = useState([]);
   const [loading,setLoading] = useState(false);
   const [error,setError] = useState(null)
-  const [showMore,setShowMore] = useState(true)
+  const [showMore,setShowMore] = useState(false)
 
 
   async function handelShoreMore(){
@@ -48,6 +48,10 @@ const Posts = ({search}) => {
       return  setError(data.message)
       }
       const data = await res.json();
+      if(data.length>=10){
+        setShowMore(true)
+
+      }
       setLoading(false)
       setPosts(data)
 
@@ -74,6 +78,8 @@ if(search){
   fetchPosts();
 
 }
+
+setShowMore(false)
   },[search])
   return loading ? <div className='w-full h-[40vh] grid place-content-center'><Spinner /></div> : <div>
     <div className="flex flex-col gap-4 my-4 mx-4">
