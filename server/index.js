@@ -21,7 +21,7 @@ dotenv.config()
 async function CoonectToDb(){
     try{
         await mongoose.connect(process.env.MONGOOSE)
-        console.log('db is runninhg')
+        console.log('Server is connected')
 
     }
     catch(e){
@@ -67,4 +67,4 @@ app.use((err,req,res,next) =>{
 
 
 
-app.listen(3000, CoonectToDb)
+app.listen(‘0.0.0.0’, CoonectToDb)
