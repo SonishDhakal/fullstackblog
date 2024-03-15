@@ -151,7 +151,7 @@ export const CreateDraft = async (req, res, next) => {
 };
 
 export const getPost = async (req, res, next) => {
-  console.log(req.query.limit)
+
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 5;

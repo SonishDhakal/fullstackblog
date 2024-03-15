@@ -125,7 +125,7 @@ export const addbookmark = async (req,res,next) =>{
         if(!hasbookmarked){
 
           const updatesBookmark = [...bookmarks, postId]
-          console.log(updatesBookmark)
+
 
           const updatePost = await Profile.findByIdAndUpdate(getProfile._id, {bookmarks:updatesBookmark}, {new:true})
           const {following,bookmarks:book} = updatePost; 
