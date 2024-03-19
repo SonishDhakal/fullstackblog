@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
 const Post = ({post}) => {
+
     const [user,setUser] = useState('')
     const [error,setError] = useState(null)
 
@@ -29,7 +30,7 @@ const data=  await res.json();
 
 
   return user &&
-<Link to={`/${user}/${post.slug}`} className='hover:underline'>
+<Link to={`/${user}/${post.slug}`} className='hover:underline' key={post._id}>
         <h2 className='truncate font-semibold'>{post.title}</h2>
 
       </Link>

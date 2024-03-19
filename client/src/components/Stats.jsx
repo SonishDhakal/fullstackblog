@@ -10,7 +10,7 @@ const Stats = ({people,users,setUsers,setProfile,name,profile}) => {
     const [error,setError] = useState();
     const {currentUser} = useSelector(state => state.user)
     const navigate = useNavigate()
-console.log(users)
+
 
     async function fetchuser(){
         const res = await fetch(`/api/user/getuserProfile/${people}`);

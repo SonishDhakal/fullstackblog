@@ -92,7 +92,7 @@ const TextEditorSidebar = ({ form, setForm,error,setError,setLoading,loading }) 
       }
       setLoading(false)
 
-      console.log(data)
+
 
     }
     catch(e){
@@ -169,7 +169,7 @@ setImageLoading(false)
           />
         </div>
         {slugError && <Alert color={'failure'}>{slugError}</Alert>}
-        <Link to={'/write?draft=preview'}>Preview here </Link>
+
       </div>
       {/* featured image */}
       <div className="flex flex-col gap-3 dark:bg-gray-700 bg-gray-100/[0.8] py-3 px-5 rounded-lg ">

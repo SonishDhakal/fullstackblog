@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const Topbar = ({search,setTag,menu,home,link}) => {
-    console.log(search)
+
   return (
     <div>
           <ul className="border-b dark:border-gray-700 pb-[-200px] flex gap-2 sm:gap-6">

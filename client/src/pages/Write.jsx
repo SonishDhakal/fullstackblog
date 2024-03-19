@@ -18,6 +18,7 @@ const Write = () => {
   const {currentUser} = useSelector(state => state.user)
 
   async function fetchPost(postId){
+    console.log(postId)
 
     setLoading(true);
     setError('')
@@ -69,6 +70,9 @@ return setLoading(false)
     const urlParams =  new URLSearchParams(location.search)
     const tabFrom = urlParams.get('draft');
     const postId = urlParams.get('id')
+    console.log(postId)
+
+
 
     if(tabFrom===null){
 
@@ -76,8 +80,13 @@ return setLoading(false)
 
         const id = uuid();
 
-       return navigate(`/write?id=${id}`)
+    
+       navigate(`/write?id=${id}`)
+
+       return setTab('pre')
       }
+
+
 
 
       fetchPost(postId)

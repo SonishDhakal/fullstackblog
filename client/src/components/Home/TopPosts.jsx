@@ -31,7 +31,7 @@ const TopPosts = () => {
   <h2 className='mx-auto text-lg font-semibold text-center mb-4'>Top Rated Posts </h2>
   <div className='flex flex-col gap-3'>
     {posts.map(post =>
-      <Post post={post} key={post.id} />
+      <Post  post={post} key={post._id} />
     )}
   </div>
 </div>
